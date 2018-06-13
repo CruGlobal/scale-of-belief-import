@@ -1,0 +1,32 @@
+service: scale-of-belief-import
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  stage: dev
+  region: us-east-1
+  versionFunctions: false
+  memorySize: 256
+  environment: ${file(serverless/environment.js)}
+
+functions:
+  api:
+    handler: api/import.handler
+    timeout: 30
+    events:
+      - http:
+          path: /api/import
+          method: ANY
+  staticfiles:
+    handler: static/staticfile.handler
+    events:
+      - http:
+          path: /{url}
+          method: get
+
+package:
+  exclude:
+    - .git/**
+
+plugins:
+  - serverless-offline

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scale of Belief bulk import</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+  <h2>Scale of Belief bulk import</h2>
+
+  <form id="bulkData">
+    <p>Paste tab separated content here:</p>
+    <div class="form-group">
+      <textarea style="height:600px;" id="inputData" class="form-control"></textarea>
+    </div>
+    <input type="button" onclick="readData()" value="Submit" class="btn btn-primary">
+  </form>
+
+  <form id="setFields" class="form-horizontal">
+    <p>Match the input data with the correct import fields.</p>
+    <div id="setFieldsContainer"></div>
+    <input type="button" onclick="setFields()" value="Submit" class="btn btn-primary">
+  </form>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+  $('#setFields').hide();
+
+  window.globalLineData = [];
+  function readData() {
+    var textArea = document.getElementById('inputData');
+    var lines = textArea.value.split('\n');
+
+    lines.forEach(function(line){
+      var lineData = line.split('\t');
+      window.globalLineData.push(lineData);
+    });
+
+
+    //set up field selection
+    var fieldOptions = [
+      {id: 'firstName', text: 'First Name'},
+      {id: 'lastName', text: 'Last Name'},
+      {id: 'email', text: 'Email'},
+      {id: 'score', text: 'Score'},
+    ];
+    window.globalLineData[0].forEach(function(colVal){
+      var fieldContainer = document.createElement('div');
+      fieldContainer.classList.add('form-group');
+      fieldContainer.innerHTML = '<label class="col-sm-3 control-label">' + colVal + '</label> ';
+
+      var selectContainer = document.createElement('div');
+      selectContainer.classList.add('col-sm-6');
+      var select = document.createElement('select');
+      select.classList.add('form-control');
+      select.name = 'field';
+
+      fieldOptions.forEach(function(field){
+        var option = document.createElement('option');
+        option.value = field.id;
+        option.text = field.text;
+        select.appendChild(option);
+      });
+      selectContainer.appendChild(select);
+      fieldContainer.appendChild(selectContainer);
+
+      document.getElementById('setFieldsContainer').appendChild(fieldContainer);
+    });
+
+    $('#setFields').show();
+    $('#bulkData').hide();
+  }
+
+  function setFields(){
+    $('#setFields').hide();
+
+    var dataToSubmit = [], fieldsArray = [];
+    $('#setFields select').each(function(){
+      fieldsArray.push($(this).val());
+    });
+
+    window.globalLineData.forEach(function(line){
+      var row = {};
+      line.forEach(function(v, i){
+        row[fieldsArray[i]] = v;
+      });
+      dataToSubmit.push(row)
+    });
+
+
+    $.ajax({
+      type: 'POST',
+      url: 'api/import',
+      data: JSON.stringify(dataToSubmit),
+      success: function(){
+        alert('Data submission successful.');
+        window.location.reload();
+      },
+      contentType: 'application/json'
+    });
+  }
+</script>
+
+</body>
+</html>
