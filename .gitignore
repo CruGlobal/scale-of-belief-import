@@ -1,0 +1,13 @@
+coverage
+node_modules/
+
+# dotenv environment variables file
+.env
+
+# Serverless directories
+.serverless
+dist
+
+# IntelliJ
+.idea
+*.iml
