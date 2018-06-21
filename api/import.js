@@ -4,13 +4,14 @@ module.exports.handler = (event, context, callback) => {
     return;
   }
 
+  let snowplowTotal = 0;
   const gr = require('./gr.js');
   const snowplow = require('./snowplow.js');
   const Batch = require('batch'), batch = new Batch;
   batch.concurrency(4);
 
   const inputData = JSON.parse(event.body);
-  inputData.forEach((user) => {
+  inputData.scores.forEach((user) => {
     if(!user.score || !user.email){
       return;
     }
@@ -21,7 +22,8 @@ module.exports.handler = (event, context, callback) => {
 
         if(person){
           let masterPersonId = person['master_person:relationship']['master_person'];
-          snowplow.track(user.score, masterPersonId);
+          snowplow.track(user.score, masterPersonId, inputData.page);
+          snowplowTotal++;
         }
 
         done();
@@ -31,6 +33,7 @@ module.exports.handler = (event, context, callback) => {
 
   batch.end(() => {
     snowplow.flush();
+    console.log('Complete. ' + snowplowTotal + ' events submitted to snowplow.');
 
     callback(null, { statusCode: 204 });
   });

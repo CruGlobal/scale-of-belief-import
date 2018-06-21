@@ -52,7 +52,10 @@ const createEntity = (user, callback) => {
       Authorization: 'Bearer ' + grAccessToken
     }
   }, (e, r, body) => {
-    if(e){ return false; }
+    if(e || r.statusCode >= 400){
+      callback(false);
+      return;
+    }
 
     const person = body.entity ? body.entity.person : false;
     if(callback){

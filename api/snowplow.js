@@ -15,10 +15,11 @@ const e = snowplow.emitter(
 );
 
 module.exports = {
-  track: (score, grMasterPersonId) => {
+  track: (score, grMasterPersonId, page) => {
     let t = snowplow.tracker([e], 'cf', 'score-bulk-import', false);
 
     t.addPayloadPair('url', 'survey://bulk-import/self-selected-' + score);
+    t.addPayloadPair('page', page);
     t.trackStructEvent('survey', 'self-selected', null, null, null, [{
       schema: 'iglu:org.cru/ids/jsonschema/1-0-3',
       data: {

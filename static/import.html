@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <title>Scale of Belief bulk import</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style>
+    .top-buffer { margin-top:20px; }
+    textarea { height: 600px !important; }
+  </style>
 </head>
 <body>
 
@@ -11,9 +15,20 @@
   <h2>Scale of Belief bulk import</h2>
 
   <form id="bulkData">
-    <p>Paste tab separated content here:</p>
-    <div class="form-group">
-      <textarea style="height:600px;" id="inputData" class="form-control"></textarea>
+    <div class="row">
+      <div class="col-md-12">
+        <span>Import title or tag: (used for reporting)</span>
+        <input type="text" class="form-control" id="page">
+      </div>
+    </div>
+
+    <div class="row top-buffer">
+      <div class="col-md-12">
+        <span>Paste tab separated content here:</span>
+        <div class="form-group">
+          <textarea id="inputData" class="form-control"></textarea>
+        </div>
+      </div>
     </div>
     <input type="button" onclick="readData()" value="Submit" class="btn btn-primary">
   </form>
@@ -95,7 +110,10 @@
     $.ajax({
       type: 'POST',
       url: 'api/import',
-      data: JSON.stringify(dataToSubmit),
+      data: JSON.stringify({
+        page: $('#page').val(),
+        scores: dataToSubmit
+      }),
       success: function(){
         alert('Data submission successful.');
         window.location.reload();
