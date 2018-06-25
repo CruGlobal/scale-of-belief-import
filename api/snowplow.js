@@ -6,7 +6,6 @@ const e = snowplow.emitter(
     'POST', // Method - defaults to GET
     null, // Only send events once n are buffered. Defaults to 1 for GET requests and 10 for POST requests.
     (error, body, response) => {
-      console.log('snowplow request complete.', body.request.body)
       if (error) {
         console.log("Request to Scala Stream Collector failed!", error);
       }
