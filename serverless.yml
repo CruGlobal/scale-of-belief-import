@@ -12,7 +12,7 @@ provider:
 functions:
   api:
     handler: api/import.handler
-    timeout: 90
+    timeout: 300
     events:
       - http:
           path: /api/import
