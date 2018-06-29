@@ -27,6 +27,7 @@ functions:
 package:
   exclude:
     - .git/**
+    - .deployment/**
 
 plugins:
   - serverless-offline
