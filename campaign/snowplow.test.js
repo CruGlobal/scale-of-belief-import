@@ -54,14 +54,14 @@ describe('Campaign Snowplow', () => {
     expect(mockTrackStructEvent).toHaveBeenCalledWith(
       'campaign',
       'open-email',
-      'Some Label',
-      'Campaign Label',
       'campaign-code',
+      'Campaign Label',
+      1,
       customContexts,
       data['log_date']);
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
-    expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some%20Label');
+    expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
   });
 
   it('Should track an open event without an external campaign code', () => {
@@ -108,14 +108,14 @@ describe('Campaign Snowplow', () => {
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
         'campaign',
         'open-email',
-        'Some Label',
-        'Campaign Label',
         null,
+        'Campaign Label',
+        1,
         customContexts,
         data['log_date']);
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
-      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some%20Label');
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
     });
 
     it('Should track an open event with an sso guid', () => {
@@ -163,14 +163,14 @@ describe('Campaign Snowplow', () => {
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
         'campaign',
         'open-email',
-        'Some Label',
-        'Campaign Label',
         null,
+        'Campaign Label',
+        1,
         customContexts,
         data['log_date']);
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
-      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some%20Label');
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
     });
 
     it('Should track a click event with an external campaign code and sso guid', () => {
@@ -221,11 +221,11 @@ describe('Campaign Snowplow', () => {
         'click-link',
         'Some Label',
         'Campaign Label',
-        'campaign-code',
+        1,
         customContexts,
         data['log_date']);
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
-      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some%20Label');
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
     });
 });

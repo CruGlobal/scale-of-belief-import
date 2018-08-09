@@ -7,37 +7,35 @@ AWS.config.update({region: 'us-east-1'});
 AWS.config.setPromisesDependency(null); // Use promises instead of callbacks
 const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
-module.exports = {
+const self = module.exports = {
   /* istanbul ignore next */
   handler: (event, context, callback) => {
     /* istanbul ignore next */
     const handleCampaignData = async () => {
       try {
         const formattedDate = util.buildFormattedDate(new Date());
-        let fileName = await this.determineFileName('opens', formattedDate);
-        let csvData = await this.getDataFromS3(fileName);
-        let openData = await this.parseDataFromCsv(csvData);
-        await this.sendOpensToSnowplow(openData);
+        let fileName = await self.determineFileName('opens', formattedDate);
+        let csvData = await self.getDataFromS3(fileName);
+        let openData = await self.parseDataFromCsv(csvData);
+        await self.sendOpensToSnowplow(openData);
 
-        fileName = await this.determineFileName('clicks', formattedDate);
-        csvData = await this.getDataFromS3(fileName);
-        let clickData = await this.parseDataFromCsv(csvData);
+        fileName = await self.determineFileName('clicks', formattedDate);
+        csvData = await self.getDataFromS3(fileName);
+        let clickData = await self.parseDataFromCsv(csvData);
         // Clicks contains the records from Opens also, but not vice versa. We need to not count opens as clicks.
-        clickData = filteredClicks(clickData, openData);
-        await this.sendClicksToSnowplow(clickData);
+        clickData = self.filterClickData(clickData, openData);
+        await self.sendClicksToSnowplow(clickData);
       } catch (error) {
         throw new Error(error);
       }
     };
 
     /* istanbul ignore next */
-    try {
-      handleCampaignData().then(() => {
-        callback(null, { statusCode: 204 });
-      });
-    } catch (error) {
+    handleCampaignData().then(() => {
+      callback(null, { statusCode: 204 });
+    }).catch((error) => {
       callback('Failed to send campaign data to snowplow: ' + error);
-    }
+    });
   },
   determineFileName: (type, formattedDate) => {
     const params = {

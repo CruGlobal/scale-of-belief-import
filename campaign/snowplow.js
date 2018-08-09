@@ -15,7 +15,7 @@ const emitter = snowplow.emitter(
 );
 
 const track = (data, action) => {
-  const tracker = snowplow.tracker([emitter], 'cf', 'score-bulk-import', false);
+  const tracker = snowplow.tracker([emitter], 'ac', 'adobecampaign', false);
 
   const jobId = encodeURIComponent(data['job_id']);
 
@@ -24,7 +24,6 @@ const track = (data, action) => {
     campaignCode = encodeURIComponent(data['ext_campaign_code']);
   }
 
-  const pageTitle = encodeURIComponent(data['delivery_label']);
   const ssoGuid = data['sso_guid'];
   const grMasterPersonId = data['gr_master_person_id'];
 
@@ -54,13 +53,14 @@ const track = (data, action) => {
   ];
 
   tracker.addPayloadPair('url', uri);
-  tracker.addPayloadPair('page', pageTitle);
+  tracker.addPayloadPair('page', data['delivery_label']);
   tracker.trackStructEvent(
     'campaign',
     action,
-    data['delivery_label'], // label
+    campaignCode ? campaignCode : null, // label
     data['adobe_campaign_label'], // property
-    campaignCode ? campaignCode : null, // value
+    //TODO: Should we put total opens/clicks here?
+    1, // value
     customContexts,
     data['log_date']
   );
