@@ -1,3 +1,5 @@
+const {isEqual} = require('lodash');
+
 const buildFormattedDate = (date) => {
   return date.getUTCFullYear() +
     getZeroPaddedValue(date.getUTCMonth() + 1) +
@@ -16,7 +18,17 @@ const groupBy = (values, key) => {
   }, {});
 };
 
+const containsObject = (collection, objectToFind) => {
+  for (let i in collection) {
+    if (isEqual(objectToFind, collection[i])) {
+      return true;
+    }
+  }
+  return false;
+};
+
 module.exports = {
   buildFormattedDate: buildFormattedDate,
-  groupBy: groupBy
+  groupBy: groupBy,
+  containsObject: containsObject
 };

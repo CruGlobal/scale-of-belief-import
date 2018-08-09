@@ -14,16 +14,17 @@ module.exports = {
     const handleCampaignData = async () => {
       try {
         const formattedDate = util.buildFormattedDate(new Date());
-        let fileName = await this.determineFileName('clicks', formattedDate);
+        let fileName = await this.determineFileName('opens', formattedDate);
         let csvData = await this.getDataFromS3(fileName);
-        let objectData = await this.parseDataFromCsv(csvData);
-        //TODO: Clicks contains the records from Opens also, but not vice versa. We need to not double count opens.
-        await this.sendClicksToSnowplow(objectData);
+        let openData = await this.parseDataFromCsv(csvData);
+        await this.sendOpensToSnowplow(openData);
 
-        fileName = await this.determineFileName('opens', formattedDate);
+        fileName = await this.determineFileName('clicks', formattedDate);
         csvData = await this.getDataFromS3(fileName);
-        objectData = await this.parseDataFromCsv(csvData);
-        await this.sendOpensToSnowplow(objectData);
+        let clickData = await this.parseDataFromCsv(csvData);
+        // Clicks contains the records from Opens also, but not vice versa. We need to not count opens as clicks.
+        clickData = filteredClicks(clickData, openData);
+        await this.sendClicksToSnowplow(clickData);
       } catch (error) {
         throw new Error(error);
       }
@@ -93,5 +94,25 @@ module.exports = {
       snowplow.trackOpen(data[i]);
     }
     snowplow.flush();
+  },
+  filterClickData: (clickData, openData) => {
+    const groupedClicks = util.groupBy(clickData, 'gr_master_person_id');
+    const groupedOpens = util.groupBy(openData, 'gr_master_person_id');
+    let filteredClicks = new Set([]);
+
+    for (let groupKey in groupedClicks) {
+
+      // If there are more clicks than opens for a given email/recipient, we know the recipient clicked something
+      if (groupedClicks[groupKey].length > groupedOpens[groupKey].length) {
+
+        for (let j in groupedClicks[groupKey]) {
+          if (!util.containsObject(groupedOpens[groupKey], groupedClicks[groupKey][j])) {
+            filteredClicks.add(groupedClicks[groupKey][j]);
+          }
+        }
+      }
+    }
+
+    return filteredClicks;
   }
 };
