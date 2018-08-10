@@ -56,7 +56,7 @@ describe('Campaign Snowplow', () => {
       'open-email',
       'campaign-code',
       'Campaign Label',
-      1,
+      null,
       customContexts,
       Date.parse(data['log_date']));
 
@@ -110,7 +110,7 @@ describe('Campaign Snowplow', () => {
         'open-email',
         null,
         'Campaign Label',
-        1,
+        null,
         customContexts,
         Date.parse(data['log_date']));
 
@@ -165,7 +165,7 @@ describe('Campaign Snowplow', () => {
         'open-email',
         null,
         'Campaign Label',
-        1,
+        null,
         customContexts,
         Date.parse(data['log_date']));
 
@@ -222,7 +222,7 @@ describe('Campaign Snowplow', () => {
         'click-link',
         'https://www.cru.org',
         'Campaign Label',
-        1,
+        null,
         customContexts,
         Date.parse(data['log_date']));
 

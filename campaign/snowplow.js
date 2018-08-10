@@ -77,8 +77,7 @@ const track = (data, action) => {
     action,
     label, // label
     data['adobe_campaign_label'], // property
-    //TODO: Should we put total opens/clicks here?
-    1, // value
+    null, // value
     customContexts,
     logDate.valueOf()
   );
