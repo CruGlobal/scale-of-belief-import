@@ -52,6 +52,8 @@ const track = (data, action) => {
     }
   ];
 
+  const logDate = data['log_date'];
+
   tracker.addPayloadPair('url', uri);
   tracker.addPayloadPair('page', data['delivery_label']);
   tracker.trackStructEvent(
@@ -62,7 +64,7 @@ const track = (data, action) => {
     //TODO: Should we put total opens/clicks here?
     1, // value
     customContexts,
-    data['log_date']
+    logDate ? Date.parse(data['log_date']) : null
   );
 };
 

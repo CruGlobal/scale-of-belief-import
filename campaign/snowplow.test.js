@@ -58,7 +58,7 @@ describe('Campaign Snowplow', () => {
       'Campaign Label',
       1,
       customContexts,
-      data['log_date']);
+      Date.parse(data['log_date']));
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
@@ -112,7 +112,7 @@ describe('Campaign Snowplow', () => {
         'Campaign Label',
         1,
         customContexts,
-        data['log_date']);
+        Date.parse(data['log_date']));
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
       expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
@@ -167,7 +167,7 @@ describe('Campaign Snowplow', () => {
         'Campaign Label',
         1,
         customContexts,
-        data['log_date']);
+        Date.parse(data['log_date']));
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
       expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
@@ -223,7 +223,7 @@ describe('Campaign Snowplow', () => {
         'Campaign Label',
         1,
         customContexts,
-        data['log_date']);
+        Date.parse(data['log_date']));
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
       expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
