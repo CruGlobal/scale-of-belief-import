@@ -24,7 +24,7 @@ describe('Campaign Import', () => {
       expect(firstRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
       expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
-      expect(firstRecord['log_date']).toEqual('2018/07/30 09:20:49');
+      expect(firstRecord['log_date']).toEqual('2018-07-30T09:20:49.000');
 
       const secondRecord = parsedData[1];
       expect(secondRecord['job_id']).toEqual('bill-test-job-id');
@@ -32,7 +32,7 @@ describe('Campaign Import', () => {
       expect(secondRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');
       expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
-      expect(secondRecord['log_date']).toEqual('2018/07/30 09:12:30');
+      expect(secondRecord['log_date']).toEqual('2018-07-30T09:12:30.000');
       done();
     });
   });
@@ -52,7 +52,7 @@ describe('Campaign Import', () => {
       expect(firstRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
       expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
-      expect(firstRecord['log_date']).toEqual('2018/07/30 09:20:49');
+      expect(firstRecord['log_date']).toEqual('2018-07-30T09:20:49.557');
 
       const secondRecord = parsedData[1];
       expect(secondRecord['job_id']).toEqual('bill-test-job-id');
@@ -60,7 +60,7 @@ describe('Campaign Import', () => {
       expect(secondRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');
       expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
-      expect(secondRecord['log_date']).toEqual('2018/07/30 09:12:33');
+      expect(secondRecord['log_date']).toEqual('2018-07-30T09:12:33.310');
 
       const thirdRecord = parsedData[2];
       expect(thirdRecord['job_id']).toEqual('bill-test-job-id');
@@ -68,7 +68,7 @@ describe('Campaign Import', () => {
       expect(thirdRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(thirdRecord['sso_guid']).toEqual('test-guid-2');
       expect(thirdRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
-      expect(thirdRecord['log_date']).toEqual('2018/07/30 09:12:30');
+      expect(thirdRecord['log_date']).toEqual('2018-07-30T09:12:30.000');
       done();
     });
   });

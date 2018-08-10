@@ -13,6 +13,7 @@
 		"batch": "^0.6.0",
 		"csv-parse": "^2.5.0",
 		"dotenv": "^5.0.0",
+		"moment-timezone": "^0.5.21",
 		"request": "^2",
 		"serverless-aws-static-file-handler": "^1.0.0",
 		"snowplow-tracker": "^0.3.0"

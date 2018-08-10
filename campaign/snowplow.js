@@ -1,4 +1,6 @@
 const snowplow = require('snowplow-tracker');
+const moment = require('moment-timezone');
+
 const emitter = snowplow.emitter(
     's.cru.org', // Collector endpoint
     'https', // Optionally specify a method - http is the default
@@ -52,7 +54,12 @@ const track = (data, action) => {
     }
   ];
 
-  const logDate = data['log_date'];
+  let logDate = data['log_date'];
+
+  if (logDate) {
+    // Log date is using the Adobe Campaign Standard server's timezone, which is EST/EDT.
+    logDate = moment.tz(logDate, 'America/New_York');
+  }
 
   tracker.addPayloadPair('url', uri);
   tracker.addPayloadPair('page', data['delivery_label']);
@@ -64,7 +71,7 @@ const track = (data, action) => {
     //TODO: Should we put total opens/clicks here?
     1, // value
     customContexts,
-    logDate ? Date.parse(data['log_date']) : null
+    logDate ? logDate.valueOf() : null
   );
 };
 

@@ -30,7 +30,7 @@ describe('Campaign Snowplow', () => {
       delivery_label: 'Some Label',
       adobe_campaign_label: 'Campaign Label',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018/07/30 09:20:49'
+      log_date: '2018-07-30T09:20:49.333'
     };
 
     campaignSnowplow.trackOpen(data);
@@ -84,7 +84,7 @@ describe('Campaign Snowplow', () => {
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
         gr_master_person_id: 'some-gr-id',
-        log_date: '2018/07/30 09:20:49'
+        log_date: '2018-07-30T09:20:49.557'
       };
 
       campaignSnowplow.trackOpen(data);
@@ -139,7 +139,7 @@ describe('Campaign Snowplow', () => {
         adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
-        log_date: '2018/07/30 09:20:49'
+        log_date: '2018-07-30T09:20:49.000'
       };
 
       campaignSnowplow.trackOpen(data);
@@ -195,7 +195,7 @@ describe('Campaign Snowplow', () => {
         adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
-        log_date: '2018/07/30 09:20:49'
+        log_date: '2018-07-30T09:20:49.454'
       };
 
       campaignSnowplow.trackClick(data);

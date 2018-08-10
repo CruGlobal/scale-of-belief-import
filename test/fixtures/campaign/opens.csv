@@ -1,4 +1,4 @@
 gr_master_person_id,sso_guid,job_id,delivery_label,ext_campaign_code,adobe_campaign_id,adobe_campaign_label,log_date
-"test-gr-master-person-id","test-guid-1","bill-test-job-id","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018/07/30 09:20:49"
-"test-gr-master-person-id","test-guid-2","bill-test-job-id","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018/07/30 09:12:33"
-"test-gr-master-person-id","test-guid-2","bill-test-job-id","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018/07/30 09:12:30"
+"test-gr-master-person-id","test-guid-1","bill-test-job-id","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018-07-30T09:20:49.557"
+"test-gr-master-person-id","test-guid-2","bill-test-job-id","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018-07-30T09:12:33.310"
+"test-gr-master-person-id","test-guid-2","bill-test-job-id","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018-07-30T09:12:30.000"
