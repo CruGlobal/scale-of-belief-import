@@ -41,7 +41,7 @@ const track = (data, action) => {
   let uri = `campaign://${action}/${jobId}`;
 
   if (campaignCode) {
-    uri = uri + `/${campaignCode}`;
+    uri = `${uri}/${campaignCode}`;
   }
 
   const customContexts = [
