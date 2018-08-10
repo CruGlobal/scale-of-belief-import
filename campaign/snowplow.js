@@ -57,12 +57,8 @@ const track = (data, action) => {
     }
   ];
 
-  let logDate = data['log_date'];
-
-  if (logDate) {
-    // Log date is using the Adobe Campaign Standard server's timezone, which is EST/EDT.
-    logDate = moment.tz(logDate, 'America/New_York');
-  }
+  // Log date is using the Adobe Campaign Standard server's timezone, which is EST/EDT.
+  let logDate = moment.tz(data['log_date'], 'America/New_York');
 
   let label;
 
@@ -84,7 +80,7 @@ const track = (data, action) => {
     //TODO: Should we put total opens/clicks here?
     1, // value
     customContexts,
-    logDate ? logDate.valueOf() : null
+    logDate.valueOf()
   );
 };
 
