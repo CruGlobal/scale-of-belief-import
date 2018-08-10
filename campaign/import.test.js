@@ -25,6 +25,7 @@ describe('Campaign Import', () => {
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
       expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
       expect(firstRecord['log_date']).toEqual('2018-07-30T09:20:49.000');
+      expect(firstRecord['click_url']).toEqual('https://google.com');
 
       const secondRecord = parsedData[1];
       expect(secondRecord['job_id']).toEqual('bill-test-job-id');
@@ -33,6 +34,7 @@ describe('Campaign Import', () => {
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');
       expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
       expect(secondRecord['log_date']).toEqual('2018-07-30T09:12:30.000');
+      expect(secondRecord['click_url']).toEqual('https://www.cru.org');
       done();
     });
   });
@@ -106,7 +108,7 @@ describe('Campaign Import', () => {
     const fileName = 'clicks_20180730_114200.csv';
     dataImport.getDataFromS3(fileName).then((csvData) => {
       expect(csvData).toBeDefined();
-      expect(csvData).toEqual(expect.stringContaining('clicks'));
+      expect(csvData).toEqual(expect.stringContaining('click_url'));
       done();
     });
   });
@@ -115,7 +117,7 @@ describe('Campaign Import', () => {
     const fileName = 'opens_20180730_114200.csv';
     dataImport.getDataFromS3(fileName).then((csvData) => {
       expect(csvData).toBeDefined();
-      expect(csvData).not.toEqual(expect.stringContaining('clicks'));
+      expect(csvData).not.toEqual(expect.stringContaining('click_url'));
       done();
     });
   });

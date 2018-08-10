@@ -1,6 +1,9 @@
 const snowplow = require('snowplow-tracker');
 const moment = require('moment-timezone');
 
+const ACTION_CLICK = 'click-link';
+const ACTION_OPEN = 'open-email';
+
 const emitter = snowplow.emitter(
     's.cru.org', // Collector endpoint
     'https', // Optionally specify a method - http is the default
@@ -61,12 +64,22 @@ const track = (data, action) => {
     logDate = moment.tz(logDate, 'America/New_York');
   }
 
+  let label;
+
+  switch (action) {
+    case ACTION_CLICK:
+      label = data['click_url'];
+      break;
+    case ACTION_OPEN:
+      label = campaignCode ? campaignCode : null
+  }
+
   tracker.addPayloadPair('url', uri);
   tracker.addPayloadPair('page', data['delivery_label']);
   tracker.trackStructEvent(
     'campaign',
     action,
-    campaignCode ? campaignCode : null, // label
+    label, // label
     data['adobe_campaign_label'], // property
     //TODO: Should we put total opens/clicks here?
     1, // value
@@ -77,10 +90,10 @@ const track = (data, action) => {
 
 module.exports = {
   trackClick: (data) => {
-    track(data, 'click-link');
+    track(data, ACTION_CLICK);
   },
   trackOpen: (data) => {
-    track(data, 'open-email');
+    track(data, ACTION_OPEN);
   },
   flush: () => {
     /* istanbul ignore next */

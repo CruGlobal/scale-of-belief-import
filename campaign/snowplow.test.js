@@ -195,7 +195,8 @@ describe('Campaign Snowplow', () => {
         adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
-        log_date: '2018-07-30T09:20:49.454'
+        log_date: '2018-07-30T09:20:49.454',
+        click_url: 'https://www.cru.org'
       };
 
       campaignSnowplow.trackClick(data);
@@ -219,7 +220,7 @@ describe('Campaign Snowplow', () => {
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
         'campaign',
         'click-link',
-        'Some Label',
+        'https://www.cru.org',
         'Campaign Label',
         1,
         customContexts,
