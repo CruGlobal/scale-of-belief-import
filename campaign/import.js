@@ -45,7 +45,7 @@ const self = module.exports = {
   determineFileName: (type, formattedDate) => {
     const params = {
       Bucket: process.env.CAMPAIGN_SNOWPLOW_S3_BUCKET,
-      Prefix: `${type}_${formattedDate}`
+      Prefix: `${type}/${type}_${formattedDate}`
     };
 
     return s3.listObjectsV2(params).promise().then((data) => {

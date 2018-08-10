@@ -5,6 +5,9 @@ const stubs = require('./aws-stubs');
 
 const AWS = {};
 
+const TYPE_OPEN = 'opens';
+const TYPE_CLICK = 'clicks';
+
 // This here is to allow/prevent runtime errors if you are using
 // AWS.config to do some runtime configuration of the library.
 AWS.config = {
@@ -24,16 +27,36 @@ AWS.S3.prototype = {
   // Stub for the listObjectsV2 method in the sdk
   listObjectsV2(params) {
     // pulling in stub data from an external file to remove the noise from this file.
-    const contents = stubs.listObjects['Contents'];
+    let contents;
+    let fileType;
+
+    if (params['Prefix'].startsWith(TYPE_OPEN)) {
+      fileType = TYPE_OPEN;
+    } else if (params['Prefix'].startsWith(TYPE_CLICK)) {
+      fileType = TYPE_CLICK;
+    } else {
+      throw new Error(`Type ${params['Prefix']} not supported.`);
+    }
+
+    let filteredData;
+
+    switch(fileType) {
+      case TYPE_OPEN:
+        contents = stubs.listOpens['Contents'];
+        filteredData = Object.create(stubs.listOpens);
+        break;
+      case TYPE_CLICK:
+        contents = stubs.listClicks['Contents'];
+        filteredData = Object.create(stubs.listClicks);
+    }
     let filteredContents = [];
 
     for (let i = 0; i < contents.length; i++) {
-      if (contents[i]['Key'].startsWith(params['Prefix'])) {
+      if (`${fileType}/${contents[i]['Key']}`.startsWith(params['Prefix'])) {
         filteredContents.push(contents[i]);
       }
     }
 
-    let filteredData = Object.create(stubs.listObjects);
     filteredData['Contents'] = filteredContents;
     return {
       promise: () => Promise.resolve(filteredData)

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-exports.listObjects = {
+exports.listOpens = {
   'IsTruncated': true,
   'Contents': [
     {
@@ -24,7 +24,20 @@ exports.listObjects = {
       'ETag': '\'0fbe739fbdc464f673056f62b6a224e2-1\'',
       'Size': 720,
       'StorageClass': 'STANDARD'
-    },
+    }
+  ],
+  'Name': 'campaign-tests',
+  'Prefix': 'opens',
+  'MaxKeys': 5,
+  'CommonPrefixes': [],
+  'KeyCount': 5,
+  'NextContinuationToken': '1xNewIeV7tIzPWdAHaFPOeGeTGRvcLfzJmcfkVkMIrBh1tYQzXNdZvknnE+9WhIwm',
+  'StartAfter': ''
+};
+
+exports.listClicks = {
+  'IsTruncated': true,
+  'Contents': [
     {
       'Key': 'clicks_20180730_114200.csv',
       'LastModified': '2018-07-30T15:42:00.000Z',
@@ -41,7 +54,7 @@ exports.listObjects = {
     }
   ],
   'Name': 'campaign-tests',
-  'Prefix': '',
+  'Prefix': 'clicks',
   'MaxKeys': 5,
   'CommonPrefixes': [],
   'KeyCount': 5,
