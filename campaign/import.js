@@ -14,17 +14,28 @@ const self = module.exports = {
     const handleCampaignData = async () => {
       try {
         const formattedDate = util.buildFormattedDate(new Date());
+        let openData;
+        let csvData;
+
         let fileName = await self.determineFileName('opens', formattedDate);
-        let csvData = await self.getDataFromS3(fileName);
-        let openData = await self.parseDataFromCsv(csvData);
-        await self.sendOpensToSnowplow(openData);
+        if (fileName) {
+          csvData = await self.getDataFromS3(fileName);
+          openData = await self.parseDataFromCsv(csvData);
+          await self.sendOpensToSnowplow(openData);
+        }
 
         fileName = await self.determineFileName('clicks', formattedDate);
-        csvData = await self.getDataFromS3(fileName);
-        let clickData = await self.parseDataFromCsv(csvData);
-        // Clicks contains the records from Opens also, but not vice versa. We need to not count opens as clicks.
-        clickData = self.filterClickData(clickData, openData);
-        await self.sendClicksToSnowplow(clickData);
+
+        if (fileName) {
+          csvData = await self.getDataFromS3(fileName);
+          let clickData = await self.parseDataFromCsv(csvData);
+
+          // Clicks contains the records from Opens also, but not vice versa. We need to not count opens as clicks.
+          if (openData) {
+            clickData = self.filterClickData(clickData, openData);
+          }
+          await self.sendClicksToSnowplow(clickData);
+        }
       } catch (error) {
         throw new Error(error);
       }
