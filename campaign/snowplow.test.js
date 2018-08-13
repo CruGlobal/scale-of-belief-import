@@ -33,7 +33,7 @@ describe('Campaign Snowplow', () => {
       log_date: '2018-07-30T09:20:49.333'
     };
 
-    campaignSnowplow.trackOpen(data);
+    campaignSnowplow.trackEvent(data, 'opens');
     expect(trackerSpy).toHaveBeenCalled();
 
     const uri = 'campaign://open-email/some-id/campaign-code';
@@ -87,7 +87,7 @@ describe('Campaign Snowplow', () => {
         log_date: '2018-07-30T09:20:49.557'
       };
 
-      campaignSnowplow.trackOpen(data);
+      campaignSnowplow.trackEvent(data, 'opens');
       expect(trackerSpy).toHaveBeenCalled();
 
       const uri = 'campaign://open-email/some-id';
@@ -142,7 +142,7 @@ describe('Campaign Snowplow', () => {
         log_date: '2018-07-30T09:20:49.000'
       };
 
-      campaignSnowplow.trackOpen(data);
+      campaignSnowplow.trackEvent(data, 'opens');
       expect(trackerSpy).toHaveBeenCalled();
 
       const uri = 'campaign://open-email/some-id';
@@ -199,7 +199,7 @@ describe('Campaign Snowplow', () => {
         click_url: 'https://www.cru.org'
       };
 
-      campaignSnowplow.trackClick(data);
+      campaignSnowplow.trackEvent(data, 'clicks');
       expect(trackerSpy).toHaveBeenCalled();
 
       const uri = 'campaign://click-link/some-id/campaign-code';

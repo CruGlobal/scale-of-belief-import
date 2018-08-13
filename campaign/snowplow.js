@@ -89,11 +89,15 @@ const track = (data, action) => {
 };
 
 module.exports = {
-  trackClick: (data) => {
-    track(data, ACTION_CLICK);
-  },
-  trackOpen: (data) => {
-    track(data, ACTION_OPEN);
+  trackEvent: (data, type) => {
+    switch (type) {
+      case 'opens':
+        track(data, ACTION_OPEN);
+        break;
+      case 'clicks':
+        track(data, ACTION_CLICK);
+        break;
+    }
   },
   flush: () => {
     /* istanbul ignore next */

@@ -133,41 +133,44 @@ describe('Campaign Import', () => {
     });
   });
 
-  it('Should send clicks to snowplow', () => {
-    const spyTrack = jest.spyOn(snowplow, 'trackClick').mockImplementation(() => jest.fn());
-    const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
-    const data = [
-      {
-        gr_master_person_id: 'some-gr-id',
-        sso_guid: 'some-guid'
-      },
-      {
-        gr_master_person_id: 'other-gr-id',
-        sso_guid: 'other-guid'
-      }
-    ];
+  describe('Send to Snowplow', () => {
+    const spyTrack = jest.spyOn(snowplow, 'trackEvent').mockImplementation(() => jest.fn());
 
-    dataImport.sendClicksToSnowplow(data);
-    expect(spyTrack).toHaveBeenCalledTimes(2);
-    expect(spyFlush).toHaveBeenCalled();
-  });
+    it('Should send clicks to snowplow', () => {
+      const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
+      const data = [
+        {
+          gr_master_person_id: 'some-gr-id',
+          sso_guid: 'some-guid'
+        },
+        {
+          gr_master_person_id: 'other-gr-id',
+          sso_guid: 'other-guid'
+        }
+      ];
 
-  it('Should send opens to snowplow', () => {
-    const spyTrack = jest.spyOn(snowplow, 'trackOpen').mockImplementation(() => jest.fn());
-    const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
-    const data = [
-      {
-        gr_master_person_id: 'some-gr-id',
-        sso_guid: 'some-guid'
-      },
-      {
-        gr_master_person_id: 'other-gr-id',
-        sso_guid: 'other-guid'
-      }
-    ];
+      dataImport.sendEventsToSnowplow(data, 'clicks');
+      expect(spyTrack).toHaveBeenCalledTimes(2);
+      expect(spyFlush).toHaveBeenCalled();
+    });
 
-    dataImport.sendOpensToSnowplow(data);
-    expect(spyTrack).toHaveBeenCalledTimes(2);
-    expect(spyFlush).toHaveBeenCalled();
+    it('Should send opens to snowplow', () => {
+      spyTrack.mockClear();
+      const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
+      const data = [
+        {
+          gr_master_person_id: 'some-gr-id',
+          sso_guid: 'some-guid'
+        },
+        {
+          gr_master_person_id: 'other-gr-id',
+          sso_guid: 'other-guid'
+        }
+      ];
+
+      dataImport.sendEventsToSnowplow(data, 'opens');
+      expect(spyTrack).toHaveBeenCalledTimes(2);
+      expect(spyFlush).toHaveBeenCalled();
+    });
   });
 });
