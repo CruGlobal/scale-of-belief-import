@@ -17,7 +17,7 @@ AWS.config = {
 
 AWS.S3 = function() {
 
-}
+};
 
 // Because I care about using the S3 service's which are part of the SDK
 // I need to setup the correct identifier.

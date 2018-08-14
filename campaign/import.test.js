@@ -47,7 +47,7 @@ describe('Campaign Import', () => {
 
     dataImport.parseDataFromCsv(csvData).then((parsedData) => {
       expect(parsedData).toBeDefined();
-      expect(parsedData.length).toEqual(3); // 2 records in the CSV
+      expect(parsedData.length).toEqual(3); // 3 records in the CSV
 
       const firstRecord = parsedData[0];
       expect(firstRecord['job_id']).toEqual('bill-test-job-id');

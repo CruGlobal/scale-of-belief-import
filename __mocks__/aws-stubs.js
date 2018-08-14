@@ -64,14 +64,14 @@ exports.listClicks = {
 
 exports.getClicks = {
   Body: fs.readFileSync(path.join(__fixturesDir, 'campaign', 'clicks.csv'), 'utf-8')
-}
+};
 
 exports.getOpens = {
   Body: fs.readFileSync(path.join(__fixturesDir, 'campaign', 'opens.csv'), 'utf-8')
-}
+};
 
 exports.getOther = (fileName) => {
   return {
     Body: fs.readFileSync(path.join(__fixturesDir, 'campaign', fileName), 'utf-8')
   };
-}
+};
