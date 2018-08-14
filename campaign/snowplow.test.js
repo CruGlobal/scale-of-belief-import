@@ -229,4 +229,59 @@ describe('Campaign Snowplow', () => {
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
       expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
     });
+
+    it('Should track a subscription event', () => {
+      const mockEmitter = {
+        flush: () => {}
+      };
+      jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
+
+      const mockTrackStructEvent = jest.fn();
+      const mockAddPayloadPair = jest.fn();
+
+      const mockTracker = {
+        addPayloadPair: mockAddPayloadPair,
+        trackStructEvent: mockTrackStructEvent
+      }
+      const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
+
+      const data = {
+        service_id: 'service-id',
+        service_label: 'Service Label',
+        origin: 'origin',
+        sso_guid: 'some-guid',
+        gr_master_person_id: 'some-gr-id',
+        date: '2018-08-10T17:04:50.419'
+      };
+
+      campaignSnowplow.trackEvent(data, 'subscriptions');
+      expect(trackerSpy).toHaveBeenCalled();
+
+      const uri = 'campaign://subscribe/service-id';
+
+      const customContexts = [
+        {
+          schema: idSchema,
+          data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        },
+        {
+          schema: scoreSchema,
+          data: {
+            uri: uri
+          }
+        }
+      ];
+
+      expect(mockTrackStructEvent).toHaveBeenCalledWith(
+        'campaign',
+        'subscribe',
+        'Service Label',
+        'origin',
+        null,
+        customContexts,
+        Date.parse(data['date']));
+
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Service Label');
+    });
 });
