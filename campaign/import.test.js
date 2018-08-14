@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const AWS = require('aws-sdk');
 const snowplow = require('./snowplow');
+const redis = require('redis');
 
 describe('Campaign Import', () => {
   it('Should be defined', () => {
