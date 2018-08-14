@@ -7,6 +7,7 @@ const AWS = {};
 
 const TYPE_OPEN = 'opens';
 const TYPE_CLICK = 'clicks';
+const TYPE_SUBSCRIPTION = 'subscriptions';
 
 // This here is to allow/prevent runtime errors if you are using
 // AWS.config to do some runtime configuration of the library.
@@ -34,6 +35,8 @@ AWS.S3.prototype = {
       fileType = TYPE_OPEN;
     } else if (params['Prefix'].startsWith(TYPE_CLICK)) {
       fileType = TYPE_CLICK;
+    } else if (params['Prefix'].startsWith(TYPE_SUBSCRIPTION)) {
+      fileType = TYPE_SUBSCRIPTION;
     } else {
       throw new Error(`Type ${params['Prefix']} not supported.`);
     }
@@ -48,6 +51,10 @@ AWS.S3.prototype = {
       case TYPE_CLICK:
         contents = stubs.listClicks['Contents'];
         filteredData = Object.create(stubs.listClicks);
+        break;
+      case TYPE_SUBSCRIPTION:
+        contents = stubs.listSubscriptions['Contents'];
+        filteredData = Object.create(stubs.listSubscriptions);
     }
     let filteredContents = [];
 
@@ -70,6 +77,8 @@ AWS.S3.prototype = {
       zippedData = stubs.getClicks;
     } else if (params['Key'].indexOf('opens') !== -1) {
       zippedData = stubs.getOpens;
+    } else if (params['Key'].indexOf(TYPE_SUBSCRIPTION) !== -1) {
+      zippedData = stubs.getSubscriptions;
     } else {
       zippedData = stubs.getOther(params['Key']);
       if (zippedData instanceof Error) {

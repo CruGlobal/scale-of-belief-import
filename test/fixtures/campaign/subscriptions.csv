@@ -1,0 +1,3 @@
+gr_master_person_id,sso_guid,service_id,service_label,origin,date
+"test-gr-master-person-id","test-guid-1","SVC40","Bill Newsletter","Bill Origin","2018-08-10T17:04:50.419"
+"test-gr-master-person-id","test-guid-2","SVC40","Bill Newsletter","Bill Origin","2018-08-10T17:04:50.419"

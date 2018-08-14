@@ -39,6 +39,7 @@ const self = module.exports = {
 
           await self.trackEvents(formattedDate, 'opens');
           await self.trackEvents(formattedDate, 'clicks');
+          await self.trackEvents(formattedDate, 'subscriptions');
           count++;
         }
 
