@@ -17,6 +17,11 @@ functions:
       - http:
           path: /api/import
           method: ANY
+  campaign:
+    handler: campaign/import.handler
+    timeout: 300
+    events:
+      - schedule: cron(0 1 * * ? *)
   staticfiles:
     handler: static/staticfile.handler
     events:
