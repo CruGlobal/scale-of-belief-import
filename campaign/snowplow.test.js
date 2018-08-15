@@ -251,7 +251,7 @@ describe('Campaign Snowplow', () => {
         origin: 'origin',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
-        date: '2018-08-10T17:04:50.419'
+        log_date: '2018-08-10T17:04:50.419'
       };
 
       campaignSnowplow.trackEvent(data, 'subscriptions');
@@ -279,7 +279,7 @@ describe('Campaign Snowplow', () => {
         'origin',
         null,
         customContexts,
-        Date.parse(data['date']));
+        Date.parse(data['log_date']));
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
       expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Service Label');

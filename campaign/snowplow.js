@@ -55,14 +55,14 @@ const track = (data, action) => {
   let label;
   let property;
   let page;
-  let eventDate;  // Dates are using the Adobe Campaign Standard server's timezone, which is EST/EDT.
+  // Dates are using the Adobe Campaign Standard server's timezone, which is EST/EDT.
+  let logDate = moment.tz(data['log_date'], 'America/New_York');
 
   switch (action) {
     case ACTION_CLICK:
       label = data['click_url'];
       property = data['adobe_campaign_label'];
       page = data['delivery_label'];
-      eventDate = moment.tz(data['log_date'], 'America/New_York');
       break;
     case ACTION_OPEN:
       let campaignCode;
@@ -73,13 +73,11 @@ const track = (data, action) => {
       label = campaignCode ? campaignCode : null;
       property = data['adobe_campaign_label'];
       page = data['delivery_label'];
-      eventDate = moment.tz(data['log_date'], 'America/New_York');
       break;
     case ACTION_SUBSCRIBE:
       label = data['service_label'];
       property = data['origin'];
       page = data['service_label'];
-      eventDate = moment.tz(data['date'], 'America/New_York');
   }
 
   tracker.addPayloadPair('url', uri);
@@ -91,7 +89,7 @@ const track = (data, action) => {
     property,
     null, // value
     customContexts,
-    eventDate.valueOf()
+    logDate.valueOf()
   );
 };
 
