@@ -5,6 +5,7 @@ const util = require('./util')
 const ACTION_CLICK = 'click-link';
 const ACTION_OPEN = 'open-email';
 const ACTION_SUBSCRIBE = 'subscribe';
+const ACTION_UNSUBSCRIBE = 'unsubscribe';
 
 const emitter = snowplow.emitter(
     's.cru.org', // Collector endpoint
@@ -75,6 +76,7 @@ const track = (data, action) => {
       page = data['delivery_label'];
       break;
     case ACTION_SUBSCRIBE:
+    case ACTION_UNSUBSCRIBE:
       label = data['service_label'];
       property = data['origin'];
       page = data['service_label'];
@@ -129,6 +131,9 @@ module.exports = {
         break;
       case 'subscriptions':
         track(data, ACTION_SUBSCRIBE);
+        break;
+      case 'unsubscriptions':
+        track(data, ACTION_UNSUBSCRIBE);
     }
   },
   flush: () => {
