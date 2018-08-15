@@ -8,6 +8,7 @@ const AWS = {};
 const TYPE_OPEN = 'opens';
 const TYPE_CLICK = 'clicks';
 const TYPE_SUBSCRIPTION = 'subscriptions';
+const TYPE_UNSUBSCRIPTION = 'unsubscriptions';
 
 // This here is to allow/prevent runtime errors if you are using
 // AWS.config to do some runtime configuration of the library.
@@ -35,6 +36,8 @@ AWS.S3.prototype = {
       fileType = TYPE_OPEN;
     } else if (params['Prefix'].startsWith(TYPE_CLICK)) {
       fileType = TYPE_CLICK;
+    } else if (params['Prefix'].startsWith(TYPE_UNSUBSCRIPTION)) {
+      fileType = TYPE_UNSUBSCRIPTION;
     } else if (params['Prefix'].startsWith(TYPE_SUBSCRIPTION)) {
       fileType = TYPE_SUBSCRIPTION;
     } else {
@@ -55,6 +58,10 @@ AWS.S3.prototype = {
       case TYPE_SUBSCRIPTION:
         contents = stubs.listSubscriptions['Contents'];
         filteredData = Object.create(stubs.listSubscriptions);
+        break;
+      case TYPE_UNSUBSCRIPTION:
+        contents = stubs.listUnsubscriptions['Contents'];
+        filteredData = Object.create(stubs.listUnsubscriptions);
     }
     let filteredContents = [];
 
@@ -77,6 +84,8 @@ AWS.S3.prototype = {
       zippedData = stubs.getClicks;
     } else if (params['Key'].indexOf('opens') !== -1) {
       zippedData = stubs.getOpens;
+    } else if (params['Key'].indexOf(TYPE_UNSUBSCRIPTION) !== -1) {
+      zippedData = stubs.getUnsubscriptions;
     } else if (params['Key'].indexOf(TYPE_SUBSCRIPTION) !== -1) {
       zippedData = stubs.getSubscriptions;
     } else {
