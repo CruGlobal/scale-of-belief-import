@@ -22,7 +22,7 @@ const emitter = snowplow.emitter(
 const track = (data, action) => {
   const tracker = snowplow.tracker([emitter], 'ac', 'adobecampaign', false);
 
-  const jobId = encodeURIComponent(data['job_id']);
+  const adobeCampaignId = encodeURIComponent(data['adobe_campaign_id']);
 
   let campaignCode;
   if (data['ext_campaign_code']) {
@@ -38,7 +38,7 @@ const track = (data, action) => {
     idData.sso_guid = ssoGuid;
   }
 
-  let uri = `campaign://${action}/${jobId}`;
+  let uri = `campaign://${action}/${adobeCampaignId}`;
 
   if (campaignCode) {
     uri = `${uri}/${campaignCode}`;
