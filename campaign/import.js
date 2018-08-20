@@ -5,6 +5,7 @@ const util = require('./util');
 const redis = require('redis');
 const moment = require('moment');
 const {promisify} = require('util');
+const zlib = require('zlib');
 
 AWS.config.update({region: 'us-east-1'});
 AWS.config.setPromisesDependency(null); // Use promises instead of callbacks
@@ -104,7 +105,7 @@ const self = module.exports = {
     };
 
     return s3.getObject(params).promise().then((data) => {
-      return data['Body'];
+      return zlib.unzipSync(data['Body']);
     });
   },
   parseDataFromCsv: (csvData) => {

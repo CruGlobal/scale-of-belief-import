@@ -92,7 +92,7 @@ describe('Campaign Import', () => {
   it('Should determine the clicks filename', done => {
     const formattedDate = '20180730';
     dataImport.determineFileName('clicks', formattedDate).then((fileName) => {
-      expect(fileName).toEqual('clicks_20180730_114200.csv');
+      expect(fileName).toEqual('clicks_20180730_114200.csv.gz');
       done();
     });
   });
@@ -100,25 +100,25 @@ describe('Campaign Import', () => {
   it('Should determine the opens filename', done => {
     const formattedDate = '20180730';
     dataImport.determineFileName('opens', formattedDate).then((fileName) => {
-      expect(fileName).toEqual('opens_20180730_114200.csv');
+      expect(fileName).toEqual('opens_20180730_114200.csv.gz');
       done();
     });
   });
 
   it('Should get CSV data from S3 for clicks', done => {
-    const fileName = 'clicks_20180730_114200.csv';
+    const fileName = 'clicks_20180730_114200.csv.gz';
     dataImport.getDataFromS3(fileName).then((csvData) => {
       expect(csvData).toBeDefined();
-      expect(csvData).toEqual(expect.stringContaining('click_url'));
+      expect(csvData).toBeInstanceOf(Buffer);
       done();
     });
   });
 
   it('Should get CSV data from S3 for opens', done => {
-    const fileName = 'opens_20180730_114200.csv';
+    const fileName = 'opens_20180730_114200.csv.gz';
     dataImport.getDataFromS3(fileName).then((csvData) => {
       expect(csvData).toBeDefined();
-      expect(csvData).not.toEqual(expect.stringContaining('click_url'));
+      expect(csvData).toBeInstanceOf(Buffer);
       done();
     });
   });
