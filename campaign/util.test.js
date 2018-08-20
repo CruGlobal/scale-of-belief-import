@@ -12,4 +12,16 @@ describe('Campaign Util', () => {
     expect(formattedDate).toBeDefined();
     expect(formattedDate).toEqual('20180730');
   });
+
+  it('Should remove a non-displayable character', () => {
+    const original = 'Here is my \ufffdcharacter';
+    const processed = util.removeNonDisplayable(original);
+    expect(processed).toEqual('Here is my character');
+  });
+
+  it('Should return the original when there is no non-displayable character', () => {
+    const original = 'Here is my character';
+    const processed = util.removeNonDisplayable(original);
+    expect(processed).toEqual(original);
+  });
 });

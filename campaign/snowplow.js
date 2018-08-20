@@ -1,5 +1,6 @@
 const snowplow = require('snowplow-tracker');
 const moment = require('moment-timezone');
+const util = require('./util')
 
 const ACTION_CLICK = 'click-link';
 const ACTION_OPEN = 'open-email';
@@ -20,6 +21,10 @@ const emitter = snowplow.emitter(
 );
 
 const track = (data, action) => {
+  Object.keys(data).forEach((element, key, _array) => {
+    data[element] = util.removeNonDisplayable(data[element]);
+  });
+
   const tracker = snowplow.tracker([emitter], 'ac', 'adobecampaign', false);
 
   const adobeCampaignId = encodeURIComponent(data['adobe_campaign_id']);
