@@ -71,7 +71,14 @@ exports.getOpens = {
 };
 
 exports.getOther = (fileName) => {
-  return {
-    Body: fs.readFileSync(path.join(__fixturesDir, 'campaign', fileName), 'utf-8')
-  };
+  try {
+    return {
+      Body: fs.readFileSync(path.join(__fixturesDir, 'campaign', fileName), 'utf-8')
+    };
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return new Error('The specified key does not exist.');
+    }
+    throw error;
+  }
 };

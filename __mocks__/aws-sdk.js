@@ -72,6 +72,9 @@ AWS.S3.prototype = {
       zippedData = stubs.getOpens;
     } else {
       zippedData = stubs.getOther(params['Key']);
+      if (zippedData instanceof Error) {
+        return { promise: () => Promise.reject(zippedData) };
+      }
     }
     return {
       promise: () => Promise.resolve(zippedData)

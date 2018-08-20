@@ -123,6 +123,16 @@ describe('Campaign Import', () => {
     });
   });
 
+  it('Should not error if we send a bad Key', done => {
+    const fileName = 'non_existent.txt';
+    dataImport.getDataFromS3(fileName).then((csvData) => {
+      expect(csvData).toBeDefined();
+      done();
+    }).catch((error) => {
+      done.fail('Fail!', error);
+    });
+  });
+
   it('Should send clicks to snowplow', () => {
     const spyTrack = jest.spyOn(snowplow, 'trackClick').mockImplementation(() => jest.fn());
     const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
