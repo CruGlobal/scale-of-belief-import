@@ -3,13 +3,33 @@
 	"version": "0.0.1",
 	"devDependencies": {
 		"serverless": "^1.27.2",
-		"serverless-offline": "^3.18.0"
+		"serverless-offline": "^3.18.0",
+		"coveralls": "^3.0.0",
+		"fs": "0.0.1-security",
+		"jest": "^22.3.0",
+		"path": "^0.12.7"
 	},
 	"dependencies": {
-		"serverless-aws-static-file-handler": "^1.0.0",
+		"batch": "^0.6.0",
+		"csv-parse": "^2.5.0",
 		"dotenv": "^5.0.0",
+		"moment-timezone": "^0.5.21",
+		"redis": "^2.8.0",
 		"request": "^2",
-		"snowplow-tracker": "^0.3.0",
-		"batch": "^0.6.0"
+		"serverless-aws-static-file-handler": "^1.0.0",
+		"snowplow-tracker": "^0.3.0"
+	},
+	"scripts": {
+		"test": "jest --forceExit --coverage"
+	},
+	"jest": {
+		"verbose": true,
+		"testEnvironment": "node",
+		"setupTestFrameworkScriptFile": "./test/test-setup.js",
+		"coveragePathIgnorePatterns": [
+			"/node_modules/",
+			"/test/",
+			"/vendor/"
+		]
 	}
 }
