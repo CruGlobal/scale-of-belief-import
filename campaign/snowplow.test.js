@@ -248,6 +248,7 @@ describe('Campaign Snowplow', () => {
       const data = {
         service_id: 'service-id',
         service_label: 'Service Label',
+        cru_service_name: 'Cru Service Name',
         origin: 'origin',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
@@ -275,7 +276,7 @@ describe('Campaign Snowplow', () => {
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
         'campaign',
         'subscribe',
-        'Service Label',
+        'Cru Service Name',
         'origin',
         null,
         customContexts,
@@ -303,6 +304,7 @@ describe('Campaign Snowplow', () => {
       const data = {
         service_id: 'service-id',
         service_label: 'Service Label',
+        cru_service_name: 'Cru Service Name',
         origin: 'origin',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
@@ -330,7 +332,7 @@ describe('Campaign Snowplow', () => {
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
         'campaign',
         'unsubscribe',
-        'Service Label',
+        'Cru Service Name',
         'origin',
         null,
         customContexts,

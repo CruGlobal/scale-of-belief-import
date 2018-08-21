@@ -77,7 +77,7 @@ const track = (data, action) => {
       break;
     case ACTION_SUBSCRIBE:
     case ACTION_UNSUBSCRIBE:
-      label = data['service_label'];
+      label = data['cru_service_name'] ? data['cru_service_name'] : null;
       property = data['origin'];
       page = data['service_label'];
   }
