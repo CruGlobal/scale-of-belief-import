@@ -64,17 +64,20 @@ AWS.S3.prototype = {
   },
 
   getObject(params) {
-    let csvData;
+    let zippedData;
 
     if (params['Key'].indexOf('clicks') !== -1) {
-      csvData = stubs.getClicks;
+      zippedData = stubs.getClicks;
     } else if (params['Key'].indexOf('opens') !== -1) {
-      csvData = stubs.getOpens;
+      zippedData = stubs.getOpens;
     } else {
-      csvData = stubs.getOther(params['Key']);
+      zippedData = stubs.getOther(params['Key']);
+      if (zippedData instanceof Error) {
+        return { promise: () => Promise.reject(zippedData) };
+      }
     }
     return {
-      promise: () => Promise.resolve(csvData)
+      promise: () => Promise.resolve(zippedData)
     };
   }
 };

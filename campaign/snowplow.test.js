@@ -25,7 +25,7 @@ describe('Campaign Snowplow', () => {
     const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
     const data = {
-      job_id: 'some-id',
+      adobe_campaign_id: 'some-id',
       ext_campaign_code: 'campaign-code',
       delivery_label: 'Some Label',
       adobe_campaign_label: 'Campaign Label',
@@ -80,7 +80,7 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        job_id: 'some-id',
+        adobe_campaign_id: 'some-id',
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
         gr_master_person_id: 'some-gr-id',
@@ -134,7 +134,7 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        job_id: 'some-id',
+        adobe_campaign_id: 'some-id',
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
@@ -189,7 +189,7 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        job_id: 'some-id',
+        adobe_campaign_id: 'some-id',
         ext_campaign_code: 'campaign-code',
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
