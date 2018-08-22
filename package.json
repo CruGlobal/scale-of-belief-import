@@ -2,12 +2,13 @@
 	"name": "scale-of-belief-import",
 	"version": "0.0.1",
 	"devDependencies": {
-		"serverless": "^1.27.2",
-		"serverless-offline": "^3.18.0",
+		"@cruglobal/serverless-merge-config": "^1.0.1",
 		"coveralls": "^3.0.0",
 		"fs": "0.0.1-security",
 		"jest": "^22.3.0",
-		"path": "^0.12.7"
+		"path": "^0.12.7",
+		"serverless": "^1.27.2",
+		"serverless-offline": "^3.18.0"
 	},
 	"dependencies": {
 		"batch": "^0.6.0",

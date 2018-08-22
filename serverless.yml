@@ -37,3 +37,4 @@ package:
 
 plugins:
   - serverless-offline
+  - '@cruglobal/serverless-merge-config'
