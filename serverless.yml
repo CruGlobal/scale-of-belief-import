@@ -8,6 +8,7 @@ provider:
   versionFunctions: false
   memorySize: 256
   environment: ${file(serverless/environment.js)}
+  $<<: ${file(serverless/provider.js)}
 
 functions:
   api:
