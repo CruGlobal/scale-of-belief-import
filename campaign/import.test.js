@@ -76,6 +76,64 @@ describe('Campaign Import', () => {
     });
   });
 
+  it('Should parse the subscriptions CSV data', done => {
+    const csvData = fs.readFileSync(path.join(__fixturesDir, 'campaign', 'subscriptions.csv'), 'utf-8');
+
+    expect(csvData).toBeDefined();
+
+    dataImport.parseDataFromCsv(csvData).then((parsedData) => {
+      expect(parsedData).toBeDefined();
+      expect(parsedData.length).toEqual(2); // 2 records in the CSV
+
+      const firstRecord = parsedData[0];
+      expect(firstRecord['service_id']).toEqual('SVC40');
+      expect(firstRecord['service_label']).toEqual('Bill Newsletter');
+      expect(firstRecord['origin']).toEqual('Bill Origin');
+      expect(firstRecord['sso_guid']).toEqual('test-guid-1');
+      expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
+      expect(firstRecord['log_date']).toEqual('2018-08-10T17:04:50.419');
+
+      const secondRecord = parsedData[1];
+      expect(firstRecord['service_id']).toEqual('SVC40');
+      expect(firstRecord['service_label']).toEqual('Bill Newsletter');
+      expect(firstRecord['origin']).toEqual('Bill Origin');
+      expect(secondRecord['sso_guid']).toEqual('test-guid-2');
+      expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
+      expect(secondRecord['log_date']).toEqual('2018-08-10T17:04:50.419');
+
+      done();
+    });
+  });
+
+  it('Should parse the unsubscriptions CSV data', done => {
+    const csvData = fs.readFileSync(path.join(__fixturesDir, 'campaign', 'unsubscriptions.csv'), 'utf-8');
+
+    expect(csvData).toBeDefined();
+
+    dataImport.parseDataFromCsv(csvData).then((parsedData) => {
+      expect(parsedData).toBeDefined();
+      expect(parsedData.length).toEqual(2); // 2 records in the CSV
+
+      const firstRecord = parsedData[0];
+      expect(firstRecord['service_id']).toEqual('SVC40');
+      expect(firstRecord['service_label']).toEqual('Bill Newsletter');
+      expect(firstRecord['origin']).toEqual('Bill Origin');
+      expect(firstRecord['sso_guid']).toEqual('test-guid-1');
+      expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
+      expect(firstRecord['log_date']).toEqual('2018-08-13T17:02:55.224');
+
+      const secondRecord = parsedData[1];
+      expect(firstRecord['service_id']).toEqual('SVC40');
+      expect(firstRecord['service_label']).toEqual('Bill Newsletter');
+      expect(firstRecord['origin']).toEqual('Bill Origin');
+      expect(secondRecord['sso_guid']).toEqual('test-guid-2');
+      expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id');
+      expect(secondRecord['log_date']).toEqual('2018-08-13T17:02:55.224');
+
+      done();
+    });
+  });
+
   it('Should reject a malformed CSV', done => {
     const csvData = fs.readFileSync(path.join(__fixturesDir, 'campaign', 'error.csv'), 'utf-8');
 
@@ -105,6 +163,22 @@ describe('Campaign Import', () => {
     });
   });
 
+  it('Should determine the subscriptions filename', done => {
+    const formattedDate = '20180730';
+    dataImport.determineFileName('subscriptions', formattedDate).then((fileName) => {
+      expect(fileName).toEqual('subscriptions_20180730_114200.csv.gz');
+      done();
+    });
+  });
+
+  it('Should determine the unsubscriptions filename', done => {
+    const formattedDate = '20180730';
+    dataImport.determineFileName('unsubscriptions', formattedDate).then((fileName) => {
+      expect(fileName).toEqual('unsubscriptions_20180730_114200.csv.gz');
+      done();
+    });
+  });
+
   it('Should get CSV data from S3 for clicks', done => {
     const fileName = 'clicks_20180730_114200.csv.gz';
     dataImport.getDataFromS3(fileName).then((csvData) => {
@@ -123,6 +197,24 @@ describe('Campaign Import', () => {
     });
   });
 
+  it('Should get CSV data from S3 for subscriptions', done => {
+    const fileName = 'subscriptions_20180730_114200.csv.gz';
+    dataImport.getDataFromS3(fileName).then((csvData) => {
+      expect(csvData).toBeDefined();
+      expect(csvData).toBeInstanceOf(Buffer);
+      done();
+    });
+  });
+
+  it('Should get CSV data from S3 for unsubscriptions', done => {
+    const fileName = 'unsubscriptions_20180730_114200.csv.gz';
+    dataImport.getDataFromS3(fileName).then((csvData) => {
+      expect(csvData).toBeDefined();
+      expect(csvData).toBeInstanceOf(Buffer);
+      done();
+    });
+  });
+
   it('Should not error if we send a bad Key', done => {
     const fileName = 'non_existent.txt';
     dataImport.getDataFromS3(fileName).then((csvData) => {
@@ -133,41 +225,82 @@ describe('Campaign Import', () => {
     });
   });
 
-  it('Should send clicks to snowplow', () => {
-    const spyTrack = jest.spyOn(snowplow, 'trackClick').mockImplementation(() => jest.fn());
-    const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
-    const data = [
-      {
-        gr_master_person_id: 'some-gr-id',
-        sso_guid: 'some-guid'
-      },
-      {
-        gr_master_person_id: 'other-gr-id',
-        sso_guid: 'other-guid'
-      }
-    ];
+  describe('Send to Snowplow', () => {
+    const spyTrack = jest.spyOn(snowplow, 'trackEvent').mockImplementation(() => jest.fn());
 
-    dataImport.sendClicksToSnowplow(data);
-    expect(spyTrack).toHaveBeenCalledTimes(2);
-    expect(spyFlush).toHaveBeenCalled();
-  });
+    it('Should send clicks to snowplow', () => {
+      const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
+      const data = [
+        {
+          gr_master_person_id: 'some-gr-id',
+          sso_guid: 'some-guid'
+        },
+        {
+          gr_master_person_id: 'other-gr-id',
+          sso_guid: 'other-guid'
+        }
+      ];
 
-  it('Should send opens to snowplow', () => {
-    const spyTrack = jest.spyOn(snowplow, 'trackOpen').mockImplementation(() => jest.fn());
-    const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
-    const data = [
-      {
-        gr_master_person_id: 'some-gr-id',
-        sso_guid: 'some-guid'
-      },
-      {
-        gr_master_person_id: 'other-gr-id',
-        sso_guid: 'other-guid'
-      }
-    ];
+      dataImport.sendEventsToSnowplow(data, 'clicks');
+      expect(spyTrack).toHaveBeenCalledTimes(2);
+      expect(spyFlush).toHaveBeenCalled();
+    });
 
-    dataImport.sendOpensToSnowplow(data);
-    expect(spyTrack).toHaveBeenCalledTimes(2);
-    expect(spyFlush).toHaveBeenCalled();
+    it('Should send opens to snowplow', () => {
+      spyTrack.mockClear();
+      const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
+      const data = [
+        {
+          gr_master_person_id: 'some-gr-id',
+          sso_guid: 'some-guid'
+        },
+        {
+          gr_master_person_id: 'other-gr-id',
+          sso_guid: 'other-guid'
+        }
+      ];
+
+      dataImport.sendEventsToSnowplow(data, 'opens');
+      expect(spyTrack).toHaveBeenCalledTimes(2);
+      expect(spyFlush).toHaveBeenCalled();
+    });
+
+    it('Should send subscriptions to snowplow', () => {
+      spyTrack.mockClear();
+      const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
+      const data = [
+        {
+          gr_master_person_id: 'some-gr-id',
+          sso_guid: 'some-guid'
+        },
+        {
+          gr_master_person_id: 'other-gr-id',
+          sso_guid: 'other-guid'
+        }
+      ];
+
+      dataImport.sendEventsToSnowplow(data, 'subscriptions');
+      expect(spyTrack).toHaveBeenCalledTimes(2);
+      expect(spyFlush).toHaveBeenCalled();
+    });
+
+    it('Should send unsubscriptions to snowplow', () => {
+      spyTrack.mockClear();
+      const spyFlush = jest.spyOn(snowplow, 'flush').mockImplementation(() => jest.fn());
+      const data = [
+        {
+          gr_master_person_id: 'some-gr-id',
+          sso_guid: 'some-guid'
+        },
+        {
+          gr_master_person_id: 'other-gr-id',
+          sso_guid: 'other-guid'
+        }
+      ];
+
+      dataImport.sendEventsToSnowplow(data, 'unsubscriptions');
+      expect(spyTrack).toHaveBeenCalledTimes(2);
+      expect(spyFlush).toHaveBeenCalled();
+    });
   });
 });

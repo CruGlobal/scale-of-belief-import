@@ -37,22 +37,10 @@ const self = module.exports = {
           dateToProcess = dateToProcess.add(1, 'days');
           formattedDate = util.buildFormattedDate(new Date(dateToProcess.valueOf()));
 
-          let csvData;
-
-          let fileName = await self.determineFileName('opens', formattedDate);
-          if (fileName) {
-            csvData = await self.getDataFromS3(fileName);
-            let openData = await self.parseDataFromCsv(csvData);
-            await self.sendOpensToSnowplow(openData);
-          }
-
-          fileName = await self.determineFileName('clicks', formattedDate);
-
-          if (fileName) {
-            csvData = await self.getDataFromS3(fileName);
-            let clickData = await self.parseDataFromCsv(csvData);
-            await self.sendClicksToSnowplow(clickData);
-          }
+          await self.trackEvents(formattedDate, 'opens');
+          await self.trackEvents(formattedDate, 'clicks');
+          await self.trackEvents(formattedDate, 'subscriptions');
+          await self.trackEvents(formattedDate, 'unsubscriptions');
           count++;
         }
 
@@ -73,6 +61,14 @@ const self = module.exports = {
       }
       callback('Failed to send campaign data to snowplow: ' + error);
     });
+  },
+  trackEvents: async (formattedDate, type) => {
+    let fileName = await self.determineFileName(type, formattedDate);
+    if (fileName) {
+      let csvData = await self.getDataFromS3(fileName);
+      let parsedData = await self.parseDataFromCsv(csvData);
+      await self.sendEventsToSnowplow(parsedData, type);
+    }
   },
   determineFileName: (type, formattedDate) => {
     const params = {
@@ -125,15 +121,9 @@ const self = module.exports = {
       });
     });
   },
-  sendClicksToSnowplow: (data) => {
+  sendEventsToSnowplow: (data, type) => {
     for (let i = 0; i < data.length; i++) {
-      snowplow.trackClick(data[i]);
-    }
-    snowplow.flush();
-  },
-  sendOpensToSnowplow: (data) => {
-    for (let i = 0; i < data.length; i++) {
-      snowplow.trackOpen(data[i]);
+      snowplow.trackEvent(data[i], type);
     }
     snowplow.flush();
   },
