@@ -38,6 +38,9 @@ module.exports.handler = (event, context, callback) => {
 
   if (endOfPath !== -1) {
     designation = uri.substring(endOfPath + 1);
+  } else {
+    callback('Bad URI: ' + uri);
+    return;
   }
 
   const label = 'siebel:donation:' + designation;
