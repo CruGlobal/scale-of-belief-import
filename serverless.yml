@@ -29,6 +29,13 @@ functions:
       - http:
           path: /{url}
           method: get
+  siebel-api:
+    handler: api/siebel.handler
+    timeout: 30
+    events:
+      - http:
+          path: /api/siebel/import
+          method: post
 
 package:
   exclude:
