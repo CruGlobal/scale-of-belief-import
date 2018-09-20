@@ -39,7 +39,7 @@ module.exports.handler = (event, context, callback) => {
   if (endOfPath !== -1) {
     designation = uri.substring(endOfPath + 1);
   } else {
-    callback('Bad URI: ' + uri);
+    callback(null, { statusCode: 400, body: 'Bad URI: ' + uri, headers: { 'Content-Type': 'text/plain' } });
     return;
   }
 
