@@ -36,7 +36,16 @@ functions:
       - http:
           path: /api/siebel/import
           method: post
-
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
 package:
   exclude:
     - .git/**
