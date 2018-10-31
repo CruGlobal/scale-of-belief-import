@@ -18,7 +18,23 @@ module.exports.handler = (event, context, callback) => {
   );
   const tracker = snowplow.tracker([emitter], 'siebel', 'siebel', false);
 
-  const inputData = JSON.parse(event.body);
+  let inputData;
+  try {
+    inputData = JSON.parse(event.body);
+  } catch (err) {
+    console.error('Failed to parse payload: ' + event.body);
+    callback(null, {
+      statusCode: 400,
+      body: 'Bad Payload.',
+      headers: {
+        'Content-Type': 'text/plain',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Credentials' : true
+      }
+    });
+    return;
+  }
+
   const uri = inputData['url'];
   const customContexts = [
     {
