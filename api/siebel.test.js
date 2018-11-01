@@ -57,8 +57,8 @@ describe('Siebel Import', () => {
       expect(response).toEqual({ statusCode: 204 });
       expect(trackerSpy).toHaveBeenCalled();
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
-        'k_m',
-        'scorable_action',
+        'donation',
+        'donate',
         'siebel:donation:0123456',
         '1-26N-462',
         null, // value

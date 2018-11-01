@@ -16,7 +16,7 @@ module.exports.handler = (event, context, callback) => {
       },
       { maxSockets: 2 }
   );
-  const tracker = snowplow.tracker([emitter], 'siebel', 'siebel', false);
+  const tracker = snowplow.tracker([emitter], 'siebel-nodejs', 'siebel', false);
 
   let inputData;
   try {
@@ -74,8 +74,8 @@ module.exports.handler = (event, context, callback) => {
   tracker.addPayloadPair('page', 'Donation');
   tracker.addPayloadPair('duid', inputData['duid']);
   tracker.trackStructEvent(
-    'k_m',
-    'scorable_action',
+    'donation',
+    'donate',
     label,
     inputData['eid'],
     null, // value
