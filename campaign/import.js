@@ -33,30 +33,8 @@ const self = module.exports = {
     /* istanbul ignore next */
     const handleCampaignData = async () => {
       try {
-        redisClient = redis.createClient(process.env.REDIS_PORT_6379_TCP_ADDR_PORT, process.env.REDIS_PORT_6379_TCP_ADDR);
+        self.setupHandlers();
         const getAsync = promisify(redisClient.get).bind(redisClient);
-
-        redisClient.on('error', (error) => {
-          throw new Error('Error connecting to Redis: ' + error);
-        });
-
-        eventTracker = snowplow.getSnowplowEventTracker();
-        eventTracker.on('ping', (eventType, numProcessed) => {
-          switch (eventType) {
-            case 'open-email':
-              finishedOpens = finishedOpens + numProcessed;
-              break;
-            case 'click-link':
-              finishedClicks = finishedClicks + numProcessed;
-              break;
-            case 'subscribe':
-              finishedSubs = finishedSubs + numProcessed;
-              break;
-            case 'unsubscribe':
-              finishedUnsubs = finishedUnsubs + numProcessed;
-              break;
-          }
-        });
 
         let lastSuccessfulDate = await getAsync(LAST_SUCCESS_KEY);
         let today = new Date();
@@ -83,32 +61,12 @@ const self = module.exports = {
 
     let timer;
 
-    const eventsHaveFinished = () => {
-      if (dayCount === 0) {
-        eventTracker.emit('end');
-        return;
-      }
-
-      if (numOpens === -1 || numClicks === -1 || numSubs === -1 || numUnsubs === -1) {
-        console.log('Something is still -1');
-        return;
-      }
-
-      if (finishedOpens >= numOpens
-        && finishedClicks >= numClicks
-        && finishedSubs >= numSubs
-        && finishedUnsubs >= numUnsubs) {
-
-        eventTracker.emit('end');
-      }
-    }
-
     /* istanbul ignore next */
     handleCampaignData().then(() => {
       redisClient.quit();
 
       // Constantly check for more events until they're all done
-      timer = setInterval(eventsHaveFinished, 3000);
+      timer = setInterval(self.eventsHaveFinished, 3000);
 
       eventTracker.on('end', () => {
         if (timer) {
@@ -195,5 +153,56 @@ const self = module.exports = {
       redisClient.set(LAST_SUCCESS_KEY, new Date(Date.now()).toISOString());
       resolve();
     });
+  },
+  eventsHaveFinished: () => {
+    if (dayCount === 0) {
+      eventTracker.emit('end');
+      return;
+    }
+
+    if (numOpens === -1 || numClicks === -1 || numSubs === -1 || numUnsubs === -1) {
+      console.log('Something is still -1');
+      return;
+    }
+
+    if (finishedOpens >= numOpens
+      && finishedClicks >= numClicks
+      && finishedSubs >= numSubs
+      && finishedUnsubs >= numUnsubs) {
+      eventTracker.emit('end');
+    }
+  },
+  setupHandlers: () => {
+    redisClient = redis.createClient(process.env.REDIS_PORT_6379_TCP_ADDR_PORT, process.env.REDIS_PORT_6379_TCP_ADDR);
+    redisClient.on('error', (error) => {
+      throw new Error('Error connecting to Redis: ' + error);
+    });
+
+    eventTracker = snowplow.getSnowplowEventTracker();
+    eventTracker.on('ping', (eventType, numProcessed) => {
+      switch (eventType) {
+        case 'open-email':
+          finishedOpens = finishedOpens + numProcessed;
+          break;
+        case 'click-link':
+          finishedClicks = finishedClicks + numProcessed;
+          break;
+        case 'subscribe':
+          finishedSubs = finishedSubs + numProcessed;
+          break;
+        case 'unsubscribe':
+          finishedUnsubs = finishedUnsubs + numProcessed;
+          break;
+      }
+    });
+  },
+
+  // For testing only
+  setDataToProcess(_dayCount, _numOpens, _numClicks, _numSubs, _numUnsubs) {
+    dayCount = _dayCount || 0;
+    numOpens = _numOpens || -1;
+    numClicks = _numClicks || -1;
+    numSubs = _numSubs || -1;
+    numUnsubs = _numUnsubs || -1;
   }
 };
