@@ -20,7 +20,7 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(2); // 2 records in the CSV
 
       const firstRecord = parsedData[0];
-      expect(firstRecord['adobe_campaign_id']).toEqual('CMP64');
+      expect(firstRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1');
       expect(firstRecord['ext_campaign_code']).toEqual('bill-test-campaign');
       expect(firstRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
@@ -29,7 +29,7 @@ describe('Campaign Import', () => {
       expect(firstRecord['click_url']).toEqual('https://google.com');
 
       const secondRecord = parsedData[1];
-      expect(secondRecord['adobe_campaign_id']).toEqual('CMP64');
+      expect(secondRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1');
       expect(secondRecord['ext_campaign_code']).toEqual('bill-test-campaign');
       expect(secondRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');
@@ -50,7 +50,7 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(3); // 3 records in the CSV
 
       const firstRecord = parsedData[0];
-      expect(firstRecord['adobe_campaign_id']).toEqual('CMP64');
+      expect(firstRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1');
       expect(firstRecord['ext_campaign_code']).toEqual('bill-test-campaign');
       expect(firstRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
@@ -58,7 +58,7 @@ describe('Campaign Import', () => {
       expect(firstRecord['log_date']).toEqual('2018-07-30T09:20:49.557');
 
       const secondRecord = parsedData[1];
-      expect(secondRecord['adobe_campaign_id']).toEqual('CMP64');
+      expect(secondRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1');
       expect(secondRecord['ext_campaign_code']).toEqual('bill-test-campaign');
       expect(secondRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');
@@ -66,7 +66,7 @@ describe('Campaign Import', () => {
       expect(secondRecord['log_date']).toEqual('2018-07-30T09:12:33.310');
 
       const thirdRecord = parsedData[2];
-      expect(thirdRecord['adobe_campaign_id']).toEqual('CMP64');
+      expect(thirdRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1');
       expect(thirdRecord['ext_campaign_code']).toEqual('bill-test-campaign');
       expect(thirdRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)');
       expect(thirdRecord['sso_guid']).toEqual('test-guid-2');
@@ -86,7 +86,6 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(2); // 2 records in the CSV
 
       const firstRecord = parsedData[0];
-      expect(firstRecord['service_id']).toEqual('SVC40');
       expect(firstRecord['service_label']).toEqual('Bill Newsletter');
       expect(firstRecord['origin']).toEqual('Bill Origin');
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
@@ -94,7 +93,6 @@ describe('Campaign Import', () => {
       expect(firstRecord['log_date']).toEqual('2018-08-10T17:04:50.419');
 
       const secondRecord = parsedData[1];
-      expect(firstRecord['service_id']).toEqual('SVC40');
       expect(firstRecord['service_label']).toEqual('Bill Newsletter');
       expect(firstRecord['origin']).toEqual('Bill Origin');
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');
@@ -115,7 +113,6 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(2); // 2 records in the CSV
 
       const firstRecord = parsedData[0];
-      expect(firstRecord['service_id']).toEqual('SVC40');
       expect(firstRecord['service_label']).toEqual('Bill Newsletter');
       expect(firstRecord['origin']).toEqual('Bill Origin');
       expect(firstRecord['sso_guid']).toEqual('test-guid-1');
@@ -123,7 +120,6 @@ describe('Campaign Import', () => {
       expect(firstRecord['log_date']).toEqual('2018-08-13T17:02:55.224');
 
       const secondRecord = parsedData[1];
-      expect(firstRecord['service_id']).toEqual('SVC40');
       expect(firstRecord['service_label']).toEqual('Bill Newsletter');
       expect(firstRecord['origin']).toEqual('Bill Origin');
       expect(secondRecord['sso_guid']).toEqual('test-guid-2');

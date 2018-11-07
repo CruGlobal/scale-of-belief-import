@@ -1,3 +1,3 @@
-gr_master_person_id,sso_guid,service_id,service_label,origin,log_date
-"test-gr-master-person-id","test-guid-1","SVC40","Bill Newsletter","Bill Origin","2018-08-13T17:02:55.224"
-"test-gr-master-person-id","test-guid-2","SVC40","Bill Newsletter","Bill Origin","2018-08-13T17:02:55.224"
+gr_master_person_id,sso_guid,service_label,origin,log_date
+"test-gr-master-person-id","test-guid-1","Bill Newsletter","Bill Origin","2018-08-13T17:02:55.224"
+"test-gr-master-person-id","test-guid-2","Bill Newsletter","Bill Origin","2018-08-13T17:02:55.224"

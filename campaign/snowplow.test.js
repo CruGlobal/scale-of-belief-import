@@ -20,7 +20,6 @@ describe('Campaign Snowplow', () => {
     const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
     const data = {
-      adobe_campaign_id: 'some-id',
       ext_campaign_code: 'campaign-code',
       delivery_label: 'Some_Label - with [square brackets] (11/7/18) v.2',
       adobe_campaign_label: 'Campaign Label',
@@ -70,7 +69,6 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        adobe_campaign_id: 'some-id',
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
         gr_master_person_id: 'some-gr-id',
@@ -119,7 +117,6 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        adobe_campaign_id: 'some-id',
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
@@ -169,7 +166,6 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        adobe_campaign_id: 'some-id',
         ext_campaign_code: 'campaign-code',
         delivery_label: 'Some Label',
         adobe_campaign_label: 'Campaign Label',
@@ -221,7 +217,6 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        service_id: 'service-id',
         service_label: 'Service Label',
         cru_service_name: 'Cru Service Name',
         origin: 'origin',
@@ -272,7 +267,6 @@ describe('Campaign Snowplow', () => {
       const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
       const data = {
-        service_id: 'service-id',
         service_label: 'Service Label',
         cru_service_name: 'Cru Service Name',
         origin: 'origin',

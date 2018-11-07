@@ -1,4 +1,4 @@
-gr_master_person_id,sso_guid,delivery_label,ext_campaign_code,adobe_campaign_id,adobe_campaign_label,log_date
-"test-gr-master-person-id","test-guid-1","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018-07-30T09:20:49.557"
-"test-gr-master-person-id","test-guid-2","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018-07-30T09:12:33.310"
-"test-gr-master-person-id","test-guid-2","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","CMP64","Bill R Test Campaign 1","2018-07-30T09:12:30.000"
+gr_master_person_id,sso_guid,delivery_label,ext_campaign_code,adobe_campaign_label,log_date
+"test-gr-master-person-id","test-guid-1","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","Bill R Test Campaign 1","2018-07-30T09:20:49.557"
+"test-gr-master-person-id","test-guid-2","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","Bill R Test Campaign 1","2018-07-30T09:12:33.310"
+"test-gr-master-person-id","test-guid-2","[2018/07/26] Multilingual email (Chinese)","bill-test-campaign","Bill R Test Campaign 1","2018-07-30T09:12:30.000"
