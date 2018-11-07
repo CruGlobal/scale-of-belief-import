@@ -1,12 +1,14 @@
 const snowplow = require('snowplow-tracker');
 const moment = require('moment-timezone');
 const util = require('./util')
+const SnowplowEventTracker = require('./snowplow-event-tracker');
 
 const ACTION_CLICK = 'click-link';
 const ACTION_OPEN = 'open-email';
 const ACTION_SUBSCRIBE = 'subscribe';
 const ACTION_UNSUBSCRIBE = 'unsubscribe';
 
+const eventTracker = new SnowplowEventTracker();
 const emitter = snowplow.emitter(
     's.cru.org', // Collector endpoint
     'https', // Optionally specify a method - http is the default
@@ -17,6 +19,12 @@ const emitter = snowplow.emitter(
       /* istanbul ignore next */
       if (error) {
         console.log("Request to Collector failed!", error);
+      } else {
+        const requestBody = body.request.body;
+        const data = JSON.parse(requestBody).data;
+        const action = data[0]['se_ac'];
+
+        eventTracker.emit('ping', action, data.length);
       }
     },
     { maxSockets: 2 }
@@ -139,5 +147,8 @@ module.exports = {
   flush: () => {
     /* istanbul ignore next */
     emitter.flush();
+  },
+  getSnowplowEventTracker: () => {
+    return eventTracker;
   }
 };
