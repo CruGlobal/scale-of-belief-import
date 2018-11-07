@@ -35,7 +35,7 @@ const track = (data, action) => {
     data[element] = util.removeNonDisplayable(data[element]);
   });
 
-  const tracker = snowplow.tracker([emitter], 'ac', 'adobecampaign', false);
+  const tracker = snowplow.tracker([emitter], 'adobecampaign-nodejs', 'adobecampaign', false);
 
   const ssoGuid = data['sso_guid'];
   const grMasterPersonId = data['gr_master_person_id'];
@@ -96,7 +96,7 @@ const track = (data, action) => {
     'campaign',
     action,
     label, // label
-    property,
+    property || null,
     null, // value
     customContexts,
     logDate.valueOf()
@@ -108,11 +108,12 @@ const buildUri = (action, data) => {
 
   let identifier;
 
-  if (data['adobe_campaign_id']) {
-    identifier = encodeURIComponent(data['adobe_campaign_id']);
-  }
-  if (data['service_id']) {
-    identifier = encodeURIComponent(data['service_id']);
+  if (data['adobe_campaign_label']) {
+    identifier = encodeURIComponent(data['adobe_campaign_label']);
+  } else if (data['delivery_label']) {
+    identifier = encodeURIComponent(data['delivery_label']);
+  } else if (data['service_label']) {
+    identifier = encodeURIComponent(data['service_label']);
   }
 
   uri = `${uri}/${identifier}`;
