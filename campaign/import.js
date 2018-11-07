@@ -13,6 +13,19 @@ const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
 const LAST_SUCCESS_KEY = 'scale-of-belief-import-campaign-last-success';
 let redisClient;
+let eventTracker;
+
+// -1 to differentiate between 0 result files
+let numOpens = -1;
+let finishedOpens = 0;
+let numClicks = -1;
+let finishedClicks = 0;
+let numSubs = -1;
+let finishedSubs = 0;
+let numUnsubs = -1;
+let finishedUnsubs = 0;
+
+let dayCount = 0;
 
 const self = module.exports = {
   /* istanbul ignore next */
@@ -20,16 +33,11 @@ const self = module.exports = {
     /* istanbul ignore next */
     const handleCampaignData = async () => {
       try {
-        redisClient = redis.createClient(process.env.REDIS_PORT_6379_TCP_ADDR_PORT, process.env.REDIS_PORT_6379_TCP_ADDR);
+        self.setupHandlers();
         const getAsync = promisify(redisClient.get).bind(redisClient);
-
-        redisClient.on('error', (error) => {
-          throw new Error('Error connecting to Redis: ' + error);
-        });
 
         let lastSuccessfulDate = await getAsync(LAST_SUCCESS_KEY);
         let today = new Date();
-        let count = 0;
 
         let dateToProcess = moment(lastSuccessfulDate);
         let formattedDate;
@@ -37,24 +45,35 @@ const self = module.exports = {
           dateToProcess = dateToProcess.add(1, 'days');
           formattedDate = util.buildFormattedDate(new Date(dateToProcess.valueOf()));
 
-          await self.trackEvents(formattedDate, 'opens');
-          await self.trackEvents(formattedDate, 'clicks');
-          await self.trackEvents(formattedDate, 'subscriptions');
-          await self.trackEvents(formattedDate, 'unsubscriptions');
-          count++;
+          numOpens = await self.trackEvents(formattedDate, 'opens');
+          numClicks = await self.trackEvents(formattedDate, 'clicks');
+          numSubs = await self.trackEvents(formattedDate, 'subscriptions');
+          numUnsubs = await self.trackEvents(formattedDate, 'unsubscriptions');
+          dayCount++;
         }
 
-        console.log(`Ran ${count} day(s) of data.`);
+        console.log(`Ran ${dayCount} day(s) of data.`);
         await self.updateLastSuccess();
       } catch (error) {
         throw new Error(error);
       }
     };
 
+    let timer;
+
     /* istanbul ignore next */
     handleCampaignData().then(() => {
       redisClient.quit();
-      callback(null, { statusCode: 204 });
+
+      // Constantly check for more events until they're all done
+      timer = setInterval(self.eventsHaveFinished, 3000);
+
+      eventTracker.on('end', () => {
+        if (timer) {
+          clearInterval(timer);
+        }
+        callback(null, { statusCode: 204 });
+      })
     }).catch((error) => {
       if (redisClient) {
         redisClient.quit();
@@ -68,7 +87,9 @@ const self = module.exports = {
       let csvData = await self.getDataFromS3(fileName);
       let parsedData = await self.parseDataFromCsv(csvData);
       await self.sendEventsToSnowplow(parsedData, type);
+      return parsedData.length;
     }
+    return 0;
   },
   determineFileName: (type, formattedDate) => {
     const params = {
@@ -132,5 +153,56 @@ const self = module.exports = {
       redisClient.set(LAST_SUCCESS_KEY, new Date(Date.now()).toISOString());
       resolve();
     });
+  },
+  eventsHaveFinished: () => {
+    if (dayCount === 0) {
+      eventTracker.emit('end');
+      return;
+    }
+
+    if (numOpens === -1 || numClicks === -1 || numSubs === -1 || numUnsubs === -1) {
+      console.log('Something is still -1');
+      return;
+    }
+
+    if (finishedOpens >= numOpens
+      && finishedClicks >= numClicks
+      && finishedSubs >= numSubs
+      && finishedUnsubs >= numUnsubs) {
+      eventTracker.emit('end');
+    }
+  },
+  setupHandlers: () => {
+    redisClient = redis.createClient(process.env.REDIS_PORT_6379_TCP_ADDR_PORT, process.env.REDIS_PORT_6379_TCP_ADDR);
+    redisClient.on('error', (error) => {
+      throw new Error('Error connecting to Redis: ' + error);
+    });
+
+    eventTracker = snowplow.getSnowplowEventTracker();
+    eventTracker.on('ping', (eventType, numProcessed) => {
+      switch (eventType) {
+        case 'open-email':
+          finishedOpens = finishedOpens + numProcessed;
+          break;
+        case 'click-link':
+          finishedClicks = finishedClicks + numProcessed;
+          break;
+        case 'subscribe':
+          finishedSubs = finishedSubs + numProcessed;
+          break;
+        case 'unsubscribe':
+          finishedUnsubs = finishedUnsubs + numProcessed;
+          break;
+      }
+    });
+  },
+
+  // For testing only
+  setDataToProcess(_dayCount, _numOpens, _numClicks, _numSubs, _numUnsubs) {
+    dayCount = _dayCount || 0;
+    numOpens = _numOpens || -1;
+    numClicks = _numClicks || -1;
+    numSubs = _numSubs || -1;
+    numUnsubs = _numUnsubs || -1;
   }
 };

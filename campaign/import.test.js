@@ -303,4 +303,53 @@ describe('Campaign Import', () => {
       expect(spyFlush).toHaveBeenCalled();
     });
   });
+
+  describe('Check for finished snowplow events', () => {
+    const eventTracker = snowplow.getSnowplowEventTracker();
+    dataImport.setupHandlers();
+
+    it('Should be finished if there were no events to process', done => {
+      timer = setInterval(dataImport.eventsHaveFinished, 2);
+      eventTracker.on('end', () => {
+        clearInterval(timer);
+        done();
+      });
+    });
+
+    it('Should be finished after the data is finished', done => {
+      // Set the number of events to process
+      dataImport.setDataToProcess(1, 15, 5, 7, 2);
+
+      // Mock the calls from the emitter callback
+      eventTracker.emit('ping', 'open-email', 15);
+      eventTracker.emit('ping', 'click-link', 5);
+      eventTracker.emit('ping', 'subscribe', 7);
+      eventTracker.emit('ping', 'unsubscribe', 2);
+
+      timer = setInterval(dataImport.eventsHaveFinished, 2);
+      eventTracker.on('end', () => {
+        clearInterval(timer);
+        done();
+      });
+    });
+
+    it('Should not end prematurely if things are sent out of order', done => {
+      dataImport.setDataToProcess(1);
+
+      // Mock the calls from the emitter callback
+      eventTracker.emit('ping', 'open-email', 15);
+      eventTracker.emit('ping', 'click-link', 5);
+      eventTracker.emit('ping', 'subscribe', 7);
+      eventTracker.emit('ping', 'unsubscribe', 2);
+
+      // Run once outside of interval loop to prove the -1 values
+      dataImport.eventsHaveFinished();
+      dataImport.setDataToProcess(1, 15, 5, 7, 2);
+      timer = setInterval(dataImport.eventsHaveFinished, 2);
+      eventTracker.on('end', () => {
+        clearInterval(timer);
+        done();
+      });
+    });
+  });
 });
