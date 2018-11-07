@@ -35,7 +35,7 @@ const track = (data, action) => {
     data[element] = util.removeNonDisplayable(data[element]);
   });
 
-  const tracker = snowplow.tracker([emitter], 'ac', 'adobecampaign', false);
+  const tracker = snowplow.tracker([emitter], 'adobecampaign-nodejs', 'adobecampaign', false);
 
   const ssoGuid = data['sso_guid'];
   const grMasterPersonId = data['gr_master_person_id'];
