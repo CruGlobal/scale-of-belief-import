@@ -57,8 +57,8 @@ describe('Siebel Import', () => {
       expect(response).toEqual({ statusCode: 204 });
       expect(trackerSpy).toHaveBeenCalled();
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
-        'k_m',
-        'scorable_action',
+        'donation',
+        'donate',
         'siebel:donation:0123456',
         '1-26N-462',
         null, // value
@@ -86,12 +86,10 @@ describe('Siebel Import', () => {
     };
 
     siebel.handler(event, null, (error, response) => {
-      if (error) {
-        console.log(error);
-        done();
-      } else {
-        done.fail();
-      }
+      expect(error).toBeNull();
+      expect(response.statusCode).toEqual(400);
+      expect(response.body).toEqual('Bad URI: bad-uri.com');
+      done();
     });
   });
 });

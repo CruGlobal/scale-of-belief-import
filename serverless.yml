@@ -9,6 +9,8 @@ provider:
   memorySize: 256
   environment: ${file(serverless/environment.js)}
   $<<: ${file(serverless/provider.js)}
+  apiKeys:
+    - ${opt:stage}-siebel-api-key
 
 functions:
   api:
@@ -36,7 +38,17 @@ functions:
       - http:
           path: /api/siebel/import
           method: post
-
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - Accept
+          private: true
 package:
   exclude:
     - .git/**

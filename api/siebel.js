@@ -16,9 +16,25 @@ module.exports.handler = (event, context, callback) => {
       },
       { maxSockets: 2 }
   );
-  const tracker = snowplow.tracker([emitter], 'siebel', 'siebel', false);
+  const tracker = snowplow.tracker([emitter], 'siebel-nodejs', 'siebel', false);
 
-  const inputData = JSON.parse(event.body);
+  let inputData;
+  try {
+    inputData = JSON.parse(event.body);
+  } catch (err) {
+    console.error('Failed to parse payload: ' + event.body);
+    callback(null, {
+      statusCode: 400,
+      body: 'Bad Payload.',
+      headers: {
+        'Content-Type': 'text/plain',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Credentials' : true
+      }
+    });
+    return;
+  }
+
   const uri = inputData['url'];
   const customContexts = [
     {
@@ -39,7 +55,16 @@ module.exports.handler = (event, context, callback) => {
   if (endOfPath !== -1) {
     designation = uri.substring(endOfPath + 1);
   } else {
-    callback('Bad URI: ' + uri);
+    console.debug('Bad URI:', uri);
+    callback(null, {
+      statusCode: 400,
+      body: 'Bad URI: ' + uri,
+      headers: {
+        'Content-Type': 'text/plain',
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Credentials' : true
+      },
+     });
     return;
   }
 
@@ -50,8 +75,8 @@ module.exports.handler = (event, context, callback) => {
   tracker.addPayloadPair('page', 'Donation');
   tracker.addPayloadPair('duid', inputData['duid']);
   tracker.trackStructEvent(
-    'k_m',
-    'scorable_action',
+    'donation',
+    'donate',
     label,
     inputData['eid'],
     null, // value
