@@ -96,7 +96,7 @@ const track = (data, action) => {
     'campaign',
     action,
     label, // label
-    property,
+    property || null,
     null, // value
     customContexts,
     logDate.valueOf()
@@ -108,7 +108,9 @@ const buildUri = (action, data) => {
 
   let identifier;
 
-  if (data['delivery_label']) {
+  if (data['adobe_campaign_label']) {
+    identifier = encodeURIComponent(data['adobe_campaign_label']);
+  } else if (data['delivery_label']) {
     identifier = encodeURIComponent(data['delivery_label']);
   } else if (data['service_label']) {
     identifier = encodeURIComponent(data['service_label']);

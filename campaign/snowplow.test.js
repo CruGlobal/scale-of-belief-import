@@ -22,7 +22,6 @@ describe('Campaign Snowplow', () => {
     const data = {
       ext_campaign_code: 'campaign-code',
       delivery_label: 'Some_Label - with [square brackets] (11/7/18) v.2',
-      adobe_campaign_label: 'Campaign Label',
       gr_master_person_id: 'some-gr-id',
       log_date: '2018-07-30T09:20:49.333'
     };
@@ -49,7 +48,7 @@ describe('Campaign Snowplow', () => {
       'campaign',
       'open-email',
       'campaign-code',
-      'Campaign Label',
+      null,
       null,
       customContexts,
       Date.parse(data['log_date']));
@@ -70,7 +69,6 @@ describe('Campaign Snowplow', () => {
 
       const data = {
         delivery_label: 'Some Label',
-        adobe_campaign_label: 'Campaign Label',
         gr_master_person_id: 'some-gr-id',
         log_date: '2018-07-30T09:20:49.557'
       };
@@ -97,7 +95,7 @@ describe('Campaign Snowplow', () => {
         'campaign',
         'open-email',
         null,
-        'Campaign Label',
+        null,
         null,
         customContexts,
         Date.parse(data['log_date']));
@@ -118,7 +116,6 @@ describe('Campaign Snowplow', () => {
 
       const data = {
         delivery_label: 'Some Label',
-        adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
         log_date: '2018-07-30T09:20:49.000'
@@ -146,7 +143,7 @@ describe('Campaign Snowplow', () => {
         'campaign',
         'open-email',
         null,
-        'Campaign Label',
+        null,
         null,
         customContexts,
         Date.parse(data['log_date']));
@@ -168,7 +165,6 @@ describe('Campaign Snowplow', () => {
       const data = {
         ext_campaign_code: 'campaign-code',
         delivery_label: 'Some Label',
-        adobe_campaign_label: 'Campaign Label',
         sso_guid: 'some-guid',
         gr_master_person_id: 'some-gr-id',
         log_date: '2018-07-30T09:20:49.454',
@@ -179,6 +175,55 @@ describe('Campaign Snowplow', () => {
       expect(trackerSpy).toHaveBeenCalled();
 
       const uri = 'campaign://click-link/Some%20Label/campaign-code';
+
+      const customContexts = [
+        {
+          schema: idSchema,
+          data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        },
+        {
+          schema: scoreSchema,
+          data: {
+            uri: uri
+          }
+        }
+      ];
+
+      expect(mockTrackStructEvent).toHaveBeenCalledWith(
+        'campaign',
+        'click-link',
+        'https://www.cru.org',
+        null,
+        null,
+        customContexts,
+        Date.parse(data['log_date']));
+
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
+      expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
+    });
+
+    it('Should use the adobe campaign label if it exists', () => {
+      const mockTrackStructEvent = jest.fn();
+      const mockAddPayloadPair = jest.fn();
+
+      const mockTracker = {
+        addPayloadPair: mockAddPayloadPair,
+        trackStructEvent: mockTrackStructEvent
+      }
+      const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
+
+      const data = {
+        adobe_campaign_label: 'Campaign Label',
+        delivery_label: 'Some Label',
+        sso_guid: 'some-guid',
+        gr_master_person_id: 'some-gr-id',
+        log_date: '2018-07-30T09:20:49.454',
+        click_url: 'https://www.cru.org'
+      };
+
+      campaignSnowplow.trackEvent(data, 'clicks');
+
+      const uri = 'campaign://click-link/Campaign%20Label';
 
       const customContexts = [
         {
