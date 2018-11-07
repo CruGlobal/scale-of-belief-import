@@ -10,11 +10,6 @@ describe('Campaign Snowplow', () => {
   const scoreSchema = 'iglu:org.cru/content-scoring/jsonschema/1-0-0';
 
   it('Should track an open event with an external campaign code', () => {
-    const mockEmitter = {
-      flush: () => {}
-    };
-    jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
-
     const mockTrackStructEvent = jest.fn();
     const mockAddPayloadPair = jest.fn();
 
@@ -65,11 +60,6 @@ describe('Campaign Snowplow', () => {
   });
 
   it('Should track an open event without an external campaign code', () => {
-      const mockEmitter = {
-        flush: () => {}
-      };
-      jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
-
       const mockTrackStructEvent = jest.fn();
       const mockAddPayloadPair = jest.fn();
 
@@ -119,11 +109,6 @@ describe('Campaign Snowplow', () => {
     });
 
     it('Should track an open event with an sso guid', () => {
-      const mockEmitter = {
-        flush: () => {}
-      };
-      jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
-
       const mockTrackStructEvent = jest.fn();
       const mockAddPayloadPair = jest.fn();
 
@@ -174,11 +159,6 @@ describe('Campaign Snowplow', () => {
     });
 
     it('Should track a click event with an external campaign code and sso guid', () => {
-      const mockEmitter = {
-        flush: () => {}
-      };
-      jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
-
       const mockTrackStructEvent = jest.fn();
       const mockAddPayloadPair = jest.fn();
 
@@ -231,11 +211,6 @@ describe('Campaign Snowplow', () => {
     });
 
     it('Should track a subscription event', () => {
-      const mockEmitter = {
-        flush: () => {}
-      };
-      jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
-
       const mockTrackStructEvent = jest.fn();
       const mockAddPayloadPair = jest.fn();
 
@@ -287,11 +262,6 @@ describe('Campaign Snowplow', () => {
     });
 
     it('Should track an unsubscription event', () => {
-      const mockEmitter = {
-        flush: () => {}
-      };
-      jest.spyOn(snowplow, 'emitter').mockImplementation(() => mockEmitter);
-
       const mockTrackStructEvent = jest.fn();
       const mockAddPayloadPair = jest.fn();
 
@@ -340,5 +310,25 @@ describe('Campaign Snowplow', () => {
 
       expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
       expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Service Label');
+    });
+
+    describe('Event Tracker', () => {
+      it('should emit a "ping" event on emitter callback', done => {
+        const requestBody = JSON.stringify({ data: [{ se_ac: 'open-email' }] });
+        const mockBody = {
+          request: {
+            body: requestBody
+          }
+        };
+
+        const eventTracker = campaignSnowplow.getSnowplowEventTracker();
+        eventTracker.on('ping', (eventType, numProcessed) => {
+          expect(eventType).toEqual('open-email');
+          expect(numProcessed).toEqual(1);
+          done();
+        });
+
+        campaignSnowplow.getEmitter().flush(mockBody);
+      });
     });
 });

@@ -150,5 +150,9 @@ module.exports = {
   },
   getSnowplowEventTracker: () => {
     return eventTracker;
+  },
+  // For testing purposes only
+  getEmitter: () => {
+    return emitter;
   }
 };
