@@ -108,10 +108,9 @@ const buildUri = (action, data) => {
 
   let identifier;
 
-  if (data['adobe_campaign_id']) {
-    identifier = encodeURIComponent(data['adobe_campaign_id']);
-  }
-  if (data['service_id']) {
+  if (data['delivery_label']) {
+    identifier = encodeURIComponent(data['delivery_label']);
+  } else if (data['service_id']) {
     identifier = encodeURIComponent(data['service_id']);
   }
 

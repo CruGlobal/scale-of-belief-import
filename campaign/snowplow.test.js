@@ -31,7 +31,7 @@ describe('Campaign Snowplow', () => {
     campaignSnowplow.trackEvent(data, 'opens');
     expect(trackerSpy).toHaveBeenCalled();
 
-    const uri = 'campaign://open-email/some-id/campaign-code';
+    const uri = 'campaign://open-email/Some%20Label/campaign-code';
 
     const customContexts = [
       {
@@ -80,7 +80,7 @@ describe('Campaign Snowplow', () => {
       campaignSnowplow.trackEvent(data, 'opens');
       expect(trackerSpy).toHaveBeenCalled();
 
-      const uri = 'campaign://open-email/some-id';
+      const uri = 'campaign://open-email/Some%20Label';
 
       const customContexts = [
         {
@@ -130,7 +130,7 @@ describe('Campaign Snowplow', () => {
       campaignSnowplow.trackEvent(data, 'opens');
       expect(trackerSpy).toHaveBeenCalled();
 
-      const uri = 'campaign://open-email/some-id';
+      const uri = 'campaign://open-email/Some%20Label';
 
       const customContexts = [
         {
@@ -182,7 +182,7 @@ describe('Campaign Snowplow', () => {
       campaignSnowplow.trackEvent(data, 'clicks');
       expect(trackerSpy).toHaveBeenCalled();
 
-      const uri = 'campaign://click-link/some-id/campaign-code';
+      const uri = 'campaign://click-link/Some%20Label/campaign-code';
 
       const customContexts = [
         {
