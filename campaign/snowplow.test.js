@@ -22,7 +22,7 @@ describe('Campaign Snowplow', () => {
     const data = {
       adobe_campaign_id: 'some-id',
       ext_campaign_code: 'campaign-code',
-      delivery_label: 'Some Label',
+      delivery_label: 'Some_Label - with [square brackets] (11/7/18) v.2',
       adobe_campaign_label: 'Campaign Label',
       gr_master_person_id: 'some-gr-id',
       log_date: '2018-07-30T09:20:49.333'
@@ -31,7 +31,7 @@ describe('Campaign Snowplow', () => {
     campaignSnowplow.trackEvent(data, 'opens');
     expect(trackerSpy).toHaveBeenCalled();
 
-    const uri = 'campaign://open-email/Some%20Label/campaign-code';
+    const uri = 'campaign://open-email/Some_Label%20-%20with%20%5Bsquare%20brackets%5D%20(11%2F7%2F18)%20v.2/campaign-code';
 
     const customContexts = [
       {
@@ -56,7 +56,7 @@ describe('Campaign Snowplow', () => {
       Date.parse(data['log_date']));
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri);
-    expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label');
+    expect(mockAddPayloadPair).toHaveBeenCalledWith('page', data['delivery_label']);
   });
 
   it('Should track an open event without an external campaign code', () => {
