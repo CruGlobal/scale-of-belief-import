@@ -110,8 +110,8 @@ const buildUri = (action, data) => {
 
   if (data['delivery_label']) {
     identifier = encodeURIComponent(data['delivery_label']);
-  } else if (data['service_id']) {
-    identifier = encodeURIComponent(data['service_id']);
+  } else if (data['service_label']) {
+    identifier = encodeURIComponent(data['service_label']);
   }
 
   uri = `${uri}/${identifier}`;

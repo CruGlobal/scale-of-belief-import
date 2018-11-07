@@ -233,7 +233,7 @@ describe('Campaign Snowplow', () => {
       campaignSnowplow.trackEvent(data, 'subscriptions');
       expect(trackerSpy).toHaveBeenCalled();
 
-      const uri = 'campaign://subscribe/service-id';
+      const uri = 'campaign://subscribe/Service%20Label';
 
       const customContexts = [
         {
@@ -284,7 +284,7 @@ describe('Campaign Snowplow', () => {
       campaignSnowplow.trackEvent(data, 'unsubscriptions');
       expect(trackerSpy).toHaveBeenCalled();
 
-      const uri = 'campaign://unsubscribe/service-id';
+      const uri = 'campaign://unsubscribe/Service%20Label';
 
       const customContexts = [
         {
