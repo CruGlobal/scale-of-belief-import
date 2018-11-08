@@ -154,8 +154,12 @@ const self = module.exports = {
   },
   updateLastSuccess: () => {
     return new Promise((resolve, reject) => {
-      redisClient.set(LAST_SUCCESS_KEY, new Date(Date.now()).toISOString());
-      resolve();
+      redisClient.set(LAST_SUCCESS_KEY, new Date(Date.now()).toISOString(), (error, response) => {
+        if (error) {
+          reject(error);
+        }
+        resolve();
+      });
     });
   },
   eventsHaveFinished: () => {
