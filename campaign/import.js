@@ -51,9 +51,6 @@ const self = module.exports = {
           numUnsubs = await self.trackEvents(formattedDate, 'unsubscriptions');
           dayCount++;
         }
-
-        console.log(`Ran ${dayCount} day(s) of data.`);
-        await self.updateLastSuccess();
       } catch (error) {
         throw new Error(error);
       }
@@ -63,8 +60,6 @@ const self = module.exports = {
 
     /* istanbul ignore next */
     handleCampaignData().then(() => {
-      redisClient.quit();
-
       // Constantly check for more events until they're all done
       timer = setInterval(self.eventsHaveFinished, 3000);
 
@@ -72,11 +67,20 @@ const self = module.exports = {
         if (timer) {
           clearInterval(timer);
         }
+        console.log(`Ran ${dayCount} day(s) of data.`);
         console.log(`Ran ${finishedOpens} of ${numOpens} open-email records.`);
         console.log(`Ran ${finishedClicks} of ${numClicks} click-link records.`);
         console.log(`Ran ${finishedSubs} of ${numSubs} subscribe records.`);
         console.log(`Ran ${finishedUnsubs} of ${numUnsubs} unsubscribe records.`);
-        callback(null, { statusCode: 204 });
+
+        self.updateLastSuccess().then(() => {
+          redisClient.quit();
+          callback(null, { statusCode: 204 });
+        }).catch((err) => {
+          redisClient.quit();
+          callback(err);
+        })
+
       })
     }).catch((error) => {
       if (redisClient) {
