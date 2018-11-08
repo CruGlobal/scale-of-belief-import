@@ -22,9 +22,11 @@ const emitter = snowplow.emitter(
       } else {
         const requestBody = body.request.body;
         const data = JSON.parse(requestBody).data;
-        const action = data[0]['se_ac'];
 
-        eventTracker.emit('ping', action, data.length);
+        if (data && data[0]) {
+          const action = data[0]['se_ac'];
+          eventTracker.emit('ping', action, data.length);
+        }
       }
     },
     { maxSockets: 2 }
