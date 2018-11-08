@@ -72,6 +72,10 @@ const self = module.exports = {
         if (timer) {
           clearInterval(timer);
         }
+        console.log(`Ran ${finishedOpens} of ${numOpens} open-email records.`);
+        console.log(`Ran ${finishedClicks} of ${numClicks} click-link records.`);
+        console.log(`Ran ${finishedSubs} of ${numSubs} subscribe records.`);
+        console.log(`Ran ${finishedUnsubs} of ${numUnsubs} unsubscribe records.`);
         callback(null, { statusCode: 204 });
       })
     }).catch((error) => {
