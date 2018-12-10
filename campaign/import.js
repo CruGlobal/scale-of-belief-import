@@ -96,6 +96,8 @@ const self = module.exports = {
       let parsedData = await self.parseDataFromCsv(csvData);
       await self.sendEventsToSnowplow(parsedData, type);
       return parsedData.length;
+    } else {
+      console.log(`File name based on ${type} ${formattedDate} not found.`);
     }
     return 0;
   },
