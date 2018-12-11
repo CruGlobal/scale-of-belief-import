@@ -348,4 +348,31 @@ describe('Campaign Import', () => {
       });
     });
   });
+
+  describe('Advance counter', () => {
+    const formattedDate = '20180730';
+    it('Should overwrite the -1 originating value', done => {
+      dataImport.totals['numOpens'] = -1;
+      jest.spyOn(dataImport, 'trackEvents').mockImplementationOnce(() => Promise.resolve(1));
+
+      dataImport.advanceCounter('numOpens', formattedDate, 'opens').then(() => {
+        expect(dataImport.totals['numOpens']).toEqual(1);
+        done();
+      }).catch((err) => {
+        done.fail(err);
+      });
+    });
+
+    it('Should add to the already-advanced value', done => {
+      dataImport.totals['numOpens'] = 1;
+      jest.spyOn(dataImport, 'trackEvents').mockImplementationOnce(() => Promise.resolve(1));
+
+      dataImport.advanceCounter('numOpens', formattedDate, 'opens').then(() => {
+        expect(dataImport.totals['numOpens']).toEqual(2);
+        done();
+      }).catch((err) => {
+        done.fail(err);
+      });
+    });
+  });
 });

@@ -15,19 +15,21 @@ const LAST_SUCCESS_KEY = 'scale-of-belief-import-campaign-last-success';
 let redisClient;
 let eventTracker;
 
-// -1 to differentiate between 0 result files
-let numOpens = -1;
 let finishedOpens = 0;
-let numClicks = -1;
 let finishedClicks = 0;
-let numSubs = -1;
 let finishedSubs = 0;
-let numUnsubs = -1;
 let finishedUnsubs = 0;
 
 let dayCount = 0;
 
 const self = module.exports = {
+  // -1 to differentiate between 0 result files
+  totals: {
+    numOpens: -1,
+    numClicks: -1,
+    numSubs: -1,
+    numUnsubs: -1
+  },
   /* istanbul ignore next */
   handler: (event, context, callback) => {
     /* istanbul ignore next */
@@ -45,10 +47,10 @@ const self = module.exports = {
           dateToProcess = dateToProcess.add(1, 'days');
           formattedDate = util.buildFormattedDate(new Date(dateToProcess.valueOf()));
 
-          numOpens = await self.trackEvents(formattedDate, 'opens');
-          numClicks = await self.trackEvents(formattedDate, 'clicks');
-          numSubs = await self.trackEvents(formattedDate, 'subscriptions');
-          numUnsubs = await self.trackEvents(formattedDate, 'unsubscriptions');
+          await self.advanceCounter('numOpens', formattedDate, 'opens');
+          await self.advanceCounter('numClicks', formattedDate, 'clicks');
+          await self.advanceCounter('numSubs', formattedDate, 'subscriptions');
+          await self.advanceCounter('numUnsubs', formattedDate, 'unsubscriptions');
           dayCount++;
         }
       } catch (error) {
@@ -68,10 +70,10 @@ const self = module.exports = {
           clearInterval(timer);
         }
         console.log(`Ran ${dayCount} day(s) of data.`);
-        console.log(`Ran ${finishedOpens} of ${numOpens} open-email records.`);
-        console.log(`Ran ${finishedClicks} of ${numClicks} click-link records.`);
-        console.log(`Ran ${finishedSubs} of ${numSubs} subscribe records.`);
-        console.log(`Ran ${finishedUnsubs} of ${numUnsubs} unsubscribe records.`);
+        console.log(`Ran ${finishedOpens} of ${self.totals.numOpens} open-email records.`);
+        console.log(`Ran ${finishedClicks} of ${self.totals.numClicks} click-link records.`);
+        console.log(`Ran ${finishedSubs} of ${self.totals.numSubs} subscribe records.`);
+        console.log(`Ran ${finishedUnsubs} of ${self.totals.numUnsubs} unsubscribe records.`);
 
         self.updateLastSuccess().then(() => {
           redisClient.quit();
@@ -88,6 +90,13 @@ const self = module.exports = {
       }
       callback('Failed to send campaign data to snowplow: ' + error);
     });
+  },
+  advanceCounter: async (counterKey, formattedDate, type) => {
+    if (self.totals[counterKey] === -1) {
+      self.totals[counterKey] = await self.trackEvents(formattedDate, type);
+    } else {
+      self.totals[counterKey] += await self.trackEvents(formattedDate, type);
+    }
   },
   trackEvents: async (formattedDate, type) => {
     let fileName = await self.determineFileName(type, formattedDate);
@@ -174,15 +183,18 @@ const self = module.exports = {
       return;
     }
 
-    if (numOpens === -1 || numClicks === -1 || numSubs === -1 || numUnsubs === -1) {
+    if (self.totals.numOpens === -1
+      || self.totals.numClicks === -1
+      || self.totals.numSubs === -1
+      || self.totals.numUnsubs === -1) {
       console.log('Something is still -1');
       return;
     }
 
-    if (finishedOpens >= numOpens
-      && finishedClicks >= numClicks
-      && finishedSubs >= numSubs
-      && finishedUnsubs >= numUnsubs) {
+    if (finishedOpens >= self.totals.numOpens
+      && finishedClicks >= self.totals.numClicks
+      && finishedSubs >= self.totals.numSubs
+      && finishedUnsubs >= self.totals.numUnsubs) {
       eventTracker.emit('end');
     }
   },
@@ -214,9 +226,9 @@ const self = module.exports = {
   // For testing only
   setDataToProcess(_dayCount, _numOpens, _numClicks, _numSubs, _numUnsubs) {
     dayCount = _dayCount || 0;
-    numOpens = _numOpens || -1;
-    numClicks = _numClicks || -1;
-    numSubs = _numSubs || -1;
-    numUnsubs = _numUnsubs || -1;
+    self.totals.numOpens = _numOpens || -1;
+    self.totals.numClicks = _numClicks || -1;
+    self.totals.numSubs = _numSubs || -1;
+    self.totals.numUnsubs = _numUnsubs || -1;
   }
 };
