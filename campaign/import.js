@@ -132,6 +132,9 @@ const self = module.exports = {
         }
       }
       return latestFileName;
+    }).catch((err) => {
+      console.error(`Failed to list objects for ${params}: ${err}`);
+      throw err;
     });
   },
   getDataFromS3: (fileName) => {
@@ -145,6 +148,7 @@ const self = module.exports = {
     }).catch((error) => {
       if (error.message === 'The specified key does not exist.') {
         // If there is no file for this, just return an empty buffer
+        console.warn(`File ${fileName} does not exist.`);
         return Buffer.from('');
       } else {
         throw error;
@@ -155,6 +159,7 @@ const self = module.exports = {
     return new Promise((resolve, reject) => {
       csvParse(csvData, { columns: true, trim: true }, (error, output) => {
         if (error) {
+          console.error('Error parsing csv:', error);
           reject(error);
         }
         resolve(output);
