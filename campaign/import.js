@@ -99,11 +99,16 @@ const self = module.exports = {
     }
   },
   trackEvents: async (formattedDate, type) => {
+    console.log(`Begin trackEvents for ${type} ${formattedDate}`);
     let fileName = await self.determineFileName(type, formattedDate);
     if (fileName) {
+      console.log(`Begin getDataFromS3 for ${fileName}`);
       let csvData = await self.getDataFromS3(fileName);
+      console.log(`Begin parseDataFromCsv for ${fileName}`);
       let parsedData = await self.parseDataFromCsv(csvData);
+      console.log(`Begin sendEventsToSnowplow for ${fileName}`);
       await self.sendEventsToSnowplow(parsedData, type);
+      console.log(`Tracking ${parsedData.length} events for ${fileName}`);
       return parsedData.length;
     } else {
       console.log(`File name based on ${type} ${formattedDate} not found.`);
