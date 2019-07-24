@@ -1,5 +1,5 @@
-const EventEmitter = require('events');
+const EventEmitter = require('events')
 
 class SnowplowEventTracker extends EventEmitter {}
 
-module.exports = SnowplowEventTracker;
+module.exports = SnowplowEventTracker
