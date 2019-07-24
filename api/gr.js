@@ -1,4 +1,5 @@
 const request = require('request');
+const has = require('lodash/has');
 
 const grBase = process.env.GR_API;
 const grAccessToken = process.env.GR_ACCESS_TOKEN;
@@ -64,6 +65,27 @@ const createEntity = (user, callback) => {
   });
 };
 
+const findMasterPersonId = (personId, accessToken = grAccessToken) => {
+  return new Promise((resolve, reject) => {
+    request.get({
+      url: `${grBase}/entities/${personId}`,
+      qs: {
+        'fields': 'master_person:relationship'
+      },
+      json: true,
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      }
+    }, (e, r, body) => {
+      if(e) { reject(e) }
+      else if(has(body, ['entity', 'person', 'master_person:relationship', 'master_person'])) {
+        resolve(body.entity.person['master_person:relationship'].master_person);
+      } else {
+        reject(new Error(`Person missing master_person id: ${personId}`))
+      }
+    });
+  })
+};
 
 module.exports = {
   findEntitiesByEmail: findEntitiesByEmail,
@@ -78,5 +100,6 @@ module.exports = {
         createEntity(user, callback);
       }
     })
-  }
+  },
+  findMasterPersonId: findMasterPersonId
 };

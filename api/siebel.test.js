@@ -1,5 +1,6 @@
 const snowplow = require('snowplow-tracker');
 const siebel = require('./siebel');
+const gr = require('./gr');
 const moment = require('moment-timezone');
 
 describe('Siebel Import', () => {
@@ -25,6 +26,8 @@ describe('Siebel Import', () => {
   const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker);
 
   it('Should track an event', done => {
+    const grSpy = jest.spyOn(gr, 'findMasterPersonId');
+    process.env['SIEBEL_GR_ACCESS_TOKEN'] = 'abc123';
     const event = {
       body: JSON.stringify(
         {
@@ -37,10 +40,12 @@ describe('Siebel Import', () => {
       )
     };
 
+    grSpy.mockResolvedValue('a-master-person-guid');
+
     const customContexts = [
       {
         schema: 'iglu:org.cru/ids/jsonschema/1-0-3',
-        data: { gr_master_person_id: 'some-guid' }
+        data: { gr_master_person_id: 'a-master-person-guid' }
       },
       {
         schema: 'iglu:org.cru/content-scoring/jsonschema/1-0-0',
@@ -55,6 +60,7 @@ describe('Siebel Import', () => {
         done.fail();
       }
       expect(response).toEqual({ statusCode: 204 });
+      expect(grSpy).toHaveBeenCalledWith('some-guid', 'abc123');
       expect(trackerSpy).toHaveBeenCalled();
       expect(mockTrackStructEvent).toHaveBeenCalledWith(
         'donation',
