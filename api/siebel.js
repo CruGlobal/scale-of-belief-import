@@ -53,7 +53,7 @@ module.exports.handler = (event, context, callback) => {
         'Content-Type': 'text/plain',
         'Access-Control-Allow-Origin' : '*',
         'Access-Control-Allow-Credentials' : true
-      },
+      }
     });
     return;
   }
