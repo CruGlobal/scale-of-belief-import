@@ -1,3 +1,3 @@
-const path = require('path');
+const path = require('path')
 
-global.__fixturesDir = path.join(__dirname, 'fixtures');
+global.__fixturesDir = path.join(__dirname, 'fixtures')

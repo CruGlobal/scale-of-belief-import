@@ -1,54 +1,54 @@
-const snowplow = require('snowplow-tracker');
-const moment = require('moment-timezone');
+const snowplow = require('snowplow-tracker')
+const moment = require('moment-timezone')
 const util = require('./util')
-const SnowplowEventTracker = require('./snowplow-event-tracker');
+const SnowplowEventTracker = require('./snowplow-event-tracker')
 
-const ACTION_CLICK = 'click-link';
-const ACTION_OPEN = 'open-email';
-const ACTION_SUBSCRIBE = 'subscribe';
-const ACTION_UNSUBSCRIBE = 'unsubscribe';
+const ACTION_CLICK = 'click-link'
+const ACTION_OPEN = 'open-email'
+const ACTION_SUBSCRIBE = 'subscribe'
+const ACTION_UNSUBSCRIBE = 'unsubscribe'
 
-const eventTracker = new SnowplowEventTracker();
+const eventTracker = new SnowplowEventTracker()
 const emitter = snowplow.emitter(
-    's.cru.org', // Collector endpoint
-    'https', // Optionally specify a method - http is the default
-    null, // Optionally specify a port
-    'POST', // Method - defaults to GET
-    null, // Only send events once n are buffered. Defaults to 1 for GET requests and 10 for POST requests.
-    (error, body, response) => {
-      /* istanbul ignore next */
-      if (error) {
-        console.log("Request to Collector failed!", error);
-      } else {
-        const requestBody = body.request.body;
-        const data = JSON.parse(requestBody).data;
+  's.cru.org', // Collector endpoint
+  'https', // Optionally specify a method - http is the default
+  null, // Optionally specify a port
+  'POST', // Method - defaults to GET
+  null, // Only send events once n are buffered. Defaults to 1 for GET requests and 10 for POST requests.
+  (error, body, response) => {
+    /* istanbul ignore next */
+    if (error) {
+      console.log('Request to Collector failed!', error)
+    } else {
+      const requestBody = body.request.body
+      const data = JSON.parse(requestBody).data
 
-        if (data && data[0]) {
-          const action = data[0]['se_ac'];
-          eventTracker.emit('ping', action, data.length);
-        }
+      if (data && data[0]) {
+        const action = data[0]['se_ac']
+        eventTracker.emit('ping', action, data.length)
       }
-    },
-    { maxSockets: 2 }
-);
+    }
+  },
+  { maxSockets: 2 }
+)
 
 const track = (data, action) => {
   Object.keys(data).forEach((element, key, _array) => {
-    data[element] = util.removeNonDisplayable(data[element]);
-  });
+    data[element] = util.removeNonDisplayable(data[element])
+  })
 
-  const tracker = snowplow.tracker([emitter], 'adobecampaign-nodejs', 'adobecampaign', false);
+  const tracker = snowplow.tracker([emitter], 'adobecampaign-nodejs', 'adobecampaign', false)
 
-  const ssoGuid = data['sso_guid'];
-  const grMasterPersonId = data['gr_master_person_id'];
+  const ssoGuid = data['sso_guid']
+  const grMasterPersonId = data['gr_master_person_id']
 
-  let idData = { gr_master_person_id: grMasterPersonId };
+  const idData = { gr_master_person_id: grMasterPersonId }
 
   if (ssoGuid) {
-    idData.sso_guid = ssoGuid;
+    idData.sso_guid = ssoGuid
   }
 
-  let uri = buildUri(action, data);
+  const uri = buildUri(action, data)
 
   const customContexts = [
     {
@@ -61,39 +61,39 @@ const track = (data, action) => {
         uri: uri
       }
     }
-  ];
+  ]
 
-  let label;
-  let property;
-  let page;
+  let label
+  let property
+  let page
   // Dates are using the Adobe Campaign Standard server's timezone, which is EST/EDT.
-  let logDate = moment.tz(data['log_date'], 'America/New_York');
+  const logDate = moment.tz(data['log_date'], 'America/New_York')
 
   switch (action) {
     case ACTION_CLICK:
-      label = data['click_url'];
-      property = data['adobe_campaign_label'];
-      page = data['delivery_label'];
-      break;
+      label = data['click_url']
+      property = data['adobe_campaign_label']
+      page = data['delivery_label']
+      break
     case ACTION_OPEN:
-      let campaignCode;
+      let campaignCode
       if (data['ext_campaign_code']) {
-        campaignCode = encodeURIComponent(data['ext_campaign_code']);
+        campaignCode = encodeURIComponent(data['ext_campaign_code'])
       }
 
-      label = campaignCode ? campaignCode : null;
-      property = data['adobe_campaign_label'];
-      page = data['delivery_label'];
-      break;
+      label = campaignCode || null
+      property = data['adobe_campaign_label']
+      page = data['delivery_label']
+      break
     case ACTION_SUBSCRIBE:
     case ACTION_UNSUBSCRIBE:
-      label = data['cru_service_name'] ? data['cru_service_name'] : null;
-      property = data['origin'];
-      page = data['service_label'];
+      label = data['cru_service_name'] ? data['cru_service_name'] : null
+      property = data['origin']
+      page = data['service_label']
   }
 
-  tracker.addPayloadPair('url', uri);
-  tracker.addPayloadPair('page', page);
+  tracker.addPayloadPair('url', uri)
+  tracker.addPayloadPair('page', page)
   tracker.trackStructEvent(
     'campaign',
     action,
@@ -102,60 +102,60 @@ const track = (data, action) => {
     null, // value
     customContexts,
     logDate.valueOf()
-  );
-};
+  )
+}
 
 const buildUri = (action, data) => {
-  let uri = `campaign://${action}`;
+  let uri = `campaign://${action}`
 
-  let identifier;
+  let identifier
 
   if (data['adobe_campaign_label']) {
-    identifier = encodeURIComponent(data['adobe_campaign_label']);
+    identifier = encodeURIComponent(data['adobe_campaign_label'])
   } else if (data['delivery_label']) {
-    identifier = encodeURIComponent(data['delivery_label']);
+    identifier = encodeURIComponent(data['delivery_label'])
   } else if (data['service_label']) {
-    identifier = encodeURIComponent(data['service_label']);
+    identifier = encodeURIComponent(data['service_label'])
   }
 
-  uri = `${uri}/${identifier}`;
+  uri = `${uri}/${identifier}`
 
-  let campaignCode;
+  let campaignCode
   if (data['ext_campaign_code']) {
-    campaignCode = encodeURIComponent(data['ext_campaign_code']);
+    campaignCode = encodeURIComponent(data['ext_campaign_code'])
   }
   if (campaignCode) {
-    uri = `${uri}/${campaignCode}`;
+    uri = `${uri}/${campaignCode}`
   }
 
-  return uri;
-};
+  return uri
+}
 
 module.exports = {
   trackEvent: (data, type) => {
     switch (type) {
       case 'opens':
-        track(data, ACTION_OPEN);
-        break;
+        track(data, ACTION_OPEN)
+        break
       case 'clicks':
-        track(data, ACTION_CLICK);
-        break;
+        track(data, ACTION_CLICK)
+        break
       case 'subscriptions':
-        track(data, ACTION_SUBSCRIBE);
-        break;
+        track(data, ACTION_SUBSCRIBE)
+        break
       case 'unsubscriptions':
-        track(data, ACTION_UNSUBSCRIBE);
+        track(data, ACTION_UNSUBSCRIBE)
     }
   },
   flush: () => {
     /* istanbul ignore next */
-    emitter.flush();
+    emitter.flush()
   },
   getSnowplowEventTracker: () => {
-    return eventTracker;
+    return eventTracker
   },
   // For testing purposes only
   getEmitter: () => {
-    return emitter;
+    return emitter
   }
-};
+}
