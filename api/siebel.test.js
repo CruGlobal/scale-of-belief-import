@@ -44,14 +44,14 @@ describe('Siebel Import', () => {
 
     const customContexts = [
       {
-        schema: 'iglu:org.cru/ids/jsonschema/1-0-3',
-        data: { gr_master_person_id: 'a-master-person-guid' }
-      },
-      {
         schema: 'iglu:org.cru/content-scoring/jsonschema/1-0-0',
         data: {
           uri: 'siebel://donation/0123456'
         }
+      },
+      {
+        schema: 'iglu:org.cru/ids/jsonschema/1-0-3',
+        data: { gr_master_person_id: 'a-master-person-guid' }
       }
     ]
 
