@@ -23,6 +23,7 @@ functions:
   campaign:
     handler: campaign/import.handler
     timeout: 300
+    memorySize: 512
     events:
       - schedule: cron(5 6 * * ? *)
   staticfiles:
