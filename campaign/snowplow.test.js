@@ -210,7 +210,7 @@ describe('Campaign Snowplow', () => {
       addPayloadPair: mockAddPayloadPair,
       trackStructEvent: mockTrackStructEvent
     }
-    const trackerSpy = jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker)
+    jest.spyOn(snowplow, 'tracker').mockImplementation(() => mockTracker)
 
     const data = {
       adobe_campaign_label: 'Campaign Label',

@@ -1,5 +1,3 @@
-const { isEqual } = require('lodash')
-
 const buildFormattedDate = (date) => {
   return date.getUTCFullYear() +
     getZeroPaddedValue(date.getUTCMonth() + 1) +

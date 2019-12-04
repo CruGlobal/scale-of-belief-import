@@ -1,6 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 
+/* global __fixturesDir */
+
 exports.listOpens = {
   IsTruncated: true,
   Contents: [
