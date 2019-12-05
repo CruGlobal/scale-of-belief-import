@@ -2,6 +2,7 @@
 @Library('jenkins-jobs') _
 
 serverlessPipeline(
-    hipchatRoom: 'scale-of-belief',
-    defaultEnvironment: 'production'
+  defaultEnvironment: 'production',
+  packageManager: 'yarn',
+  assumeRole: 'arn:aws:iam::056154071827:role/scale-of-belief-import-DeployRole'
 )

@@ -54,7 +54,7 @@ const createEntity = (user, callback) => {
     }
   }, (e, r, body) => {
     if (e || r.statusCode >= 400) {
-      callback(false)
+      callback(false) // eslint-disable-line
       return
     }
 

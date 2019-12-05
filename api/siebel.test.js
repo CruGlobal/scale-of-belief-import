@@ -8,9 +8,6 @@ describe('Siebel Import', () => {
     expect(siebel).toBeDefined()
   })
 
-  const idSchema = 'iglu:org.cru/ids/jsonschema/1-0-3'
-  const scoreSchema = 'iglu:org.cru/content-scoring/jsonschema/1-0-0'
-
   const mockEmitter = {
     flush: jest.fn()
   }

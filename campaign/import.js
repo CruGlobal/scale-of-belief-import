@@ -87,7 +87,7 @@ const self = module.exports = {
       if (redisClient) {
         redisClient.quit()
       }
-      callback('Failed to send campaign data to snowplow: ' + error)
+      callback('Failed to send campaign data to snowplow: ' + error) // eslint-disable-line
     })
   },
   advanceCounter: async (counterKey, formattedDate, type) => {

@@ -1,9 +1,9 @@
 const dataImport = require('./import')
 const fs = require('fs')
 const path = require('path')
-const AWS = require('aws-sdk')
 const snowplow = require('./snowplow')
-const redis = require('redis')
+
+/* global __fixturesDir */
 
 describe('Campaign Import', () => {
   it('Should be defined', () => {
@@ -305,7 +305,7 @@ describe('Campaign Import', () => {
     dataImport.setupHandlers()
 
     it('Should be finished if there were no events to process', done => {
-      timer = setInterval(dataImport.eventsHaveFinished, 2)
+      let timer = setInterval(dataImport.eventsHaveFinished, 2)
       eventTracker.on('end', () => {
         clearInterval(timer)
         done()
@@ -322,7 +322,7 @@ describe('Campaign Import', () => {
       eventTracker.emit('ping', 'subscribe', 7)
       eventTracker.emit('ping', 'unsubscribe', 2)
 
-      timer = setInterval(dataImport.eventsHaveFinished, 2)
+      let timer = setInterval(dataImport.eventsHaveFinished, 2)
       eventTracker.on('end', () => {
         clearInterval(timer)
         done()
@@ -341,7 +341,7 @@ describe('Campaign Import', () => {
       // Run once outside of interval loop to prove the -1 values
       dataImport.eventsHaveFinished()
       dataImport.setDataToProcess(1, 15, 5, 7, 2)
-      timer = setInterval(dataImport.eventsHaveFinished, 2)
+      let timer = setInterval(dataImport.eventsHaveFinished, 2)
       eventTracker.on('end', () => {
         clearInterval(timer)
         done()

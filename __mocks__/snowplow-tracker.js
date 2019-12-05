@@ -1,5 +1,3 @@
-let emitterCallback
-
 module.exports = {
   emitter: (endpoint, protocol, port, method, bufferSize, callback, agentOptions) => {
     return {
@@ -11,7 +9,7 @@ module.exports = {
       }
     }
   },
-  tracker: (emitters, namespace, app_id, base64) => {
+  tracker: (emitters, namespace, appId, base64) => {
     return {
       addPayloadPair: jest.fn(),
       trackStructEvent: jest.fn()

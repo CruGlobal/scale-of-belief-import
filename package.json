@@ -1,15 +1,28 @@
 {
 	"name": "scale-of-belief-import",
 	"version": "0.0.1",
+	"engines": {
+		"node": "> 10.15.0"
+	},
+	"private": true,
 	"devDependencies": {
-		"@cruglobal/serverless-merge-config": "^1.0.1",
-		"coveralls": "^3.0.0",
-		"dotenv": "^5.0.0",
+		"@babel/core": "^7.6.4",
+		"@babel/preset-env": "^7.6.3",
+		"@cruglobal/serverless-merge-config": "^1.1.0",
+		"@types/jest": "^24.0.15",
+		"babel-jest": "^24.9.0",
+		"babel-plugin-source-map-support": "^2.1.1",
+		"coveralls": "^3.0.7",
+		"dotenv": "^8.0.0",
 		"fs": "0.0.1-security",
-		"jest": "^22.3.0",
+		"jest": "^24.8.0",
 		"path": "^0.12.7",
-		"serverless": "^1.27.2",
-		"serverless-offline": "^3.18.0"
+		"serverless": "^1.44.1",
+		"serverless-offline": "^3.18.0",
+		"serverless-webpack": "^5.3.1",
+		"standard": "^12.0.1",
+		"webpack": "^4.2.0",
+		"webpack-node-externals": "^1.6.0"
 	},
 	"dependencies": {
 		"batch": "^0.6.0",
@@ -20,19 +33,22 @@
 		"redis": "^2.8.0",
 		"request": "^2",
 		"serverless-aws-static-file-handler": "^1.0.0",
-		"snowplow-tracker": "^0.3.0"
+		"snowplow-tracker": "^0.3.0",
+		"source-map-support": "^0.5.13"
 	},
 	"scripts": {
+		"lint": "standard",
 		"test": "jest --forceExit --coverage"
 	},
+	"standard": {
+		"env": {
+			"node": true,
+			"jest": true
+		}
+	},
 	"jest": {
-		"verbose": true,
-		"testEnvironment": "node",
-		"setupTestFrameworkScriptFile": "./test/test-setup.js",
-		"coveragePathIgnorePatterns": [
-			"/node_modules/",
-			"/test/",
-			"/vendor/"
+		"setupFiles": [
+			"./test/test-setup.js"
 		]
 	}
 }
