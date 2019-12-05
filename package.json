@@ -27,7 +27,7 @@
 	"dependencies": {
 		"aws-sdk": "^2.585.0",
 		"batch": "^0.6.0",
-		"csv-parse": "^2.5.0",
+		"csv-parse": "^4.4.6",
 		"lodash": "^4.17.15",
 		"moment": "^2.24.0",
 		"moment-timezone": "^0.5.27",
