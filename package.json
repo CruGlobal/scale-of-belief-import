@@ -25,6 +25,7 @@
 		"webpack-node-externals": "^1.6.0"
 	},
 	"dependencies": {
+		"aws-sdk": "^2.585.0",
 		"batch": "^0.6.0",
 		"csv-parse": "^2.5.0",
 		"lodash": "^4.17.15",
