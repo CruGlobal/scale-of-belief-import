@@ -208,7 +208,11 @@ const self = module.exports = {
     }
   },
   setupHandlers: () => {
-    redisClient = redis.createClient(process.env.REDIS_PORT_6379_TCP_ADDR_PORT, process.env.REDIS_PORT_6379_TCP_ADDR)
+    redisClient = redis.createClient({
+      host: process.env.STORAGE_REDIS_HOST,
+      port: process.env.STORAGE_REDIS_PORT,
+      db: process.env.STORAGE_DB_INDEX
+    })
     redisClient.on('error', (error) => {
       throw new Error('Error connecting to Redis: ' + error)
     })
