@@ -23,7 +23,8 @@ describe('Campaign Snowplow', () => {
       ext_campaign_code: 'campaign-code',
       delivery_label: 'Some_Label - with [square brackets] (11/7/18) v.2',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018-07-30T09:20:49.333'
+      log_date: '2018-07-30T09:20:49.333',
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'opens')
@@ -34,7 +35,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id' }
+        data: { gr_master_person_id: 'some-gr-id', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
@@ -70,7 +71,8 @@ describe('Campaign Snowplow', () => {
     const data = {
       delivery_label: 'Some Label',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018-07-30T09:20:49.557'
+      log_date: '2018-07-30T09:20:49.557',
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'opens')
@@ -81,7 +83,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id' }
+        data: { gr_master_person_id: 'some-gr-id', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
@@ -118,7 +120,8 @@ describe('Campaign Snowplow', () => {
       delivery_label: 'Some Label',
       sso_guid: 'some-guid',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018-07-30T09:20:49.000'
+      log_date: '2018-07-30T09:20:49.000',
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'opens')
@@ -129,7 +132,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
@@ -168,7 +171,8 @@ describe('Campaign Snowplow', () => {
       sso_guid: 'some-guid',
       gr_master_person_id: 'some-gr-id',
       log_date: '2018-07-30T09:20:49.454',
-      click_url: 'https://www.cru.org'
+      click_url: 'https://www.cru.org',
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'clicks')
@@ -179,7 +183,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
@@ -218,7 +222,8 @@ describe('Campaign Snowplow', () => {
       sso_guid: 'some-guid',
       gr_master_person_id: 'some-gr-id',
       log_date: '2018-07-30T09:20:49.454',
-      click_url: 'https://www.cru.org'
+      click_url: 'https://www.cru.org',
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'clicks')
@@ -228,7 +233,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
@@ -267,7 +272,8 @@ describe('Campaign Snowplow', () => {
       origin: 'origin',
       sso_guid: 'some-guid',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018-08-10T17:04:50.419'
+      log_date: '2018-08-10T17:04:50.419', 
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'subscriptions')
@@ -278,7 +284,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
@@ -317,7 +323,8 @@ describe('Campaign Snowplow', () => {
       origin: 'origin',
       sso_guid: 'some-guid',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018-08-10T17:04:50.419'
+      log_date: '2018-08-10T17:04:50.419',
+      acs_email: 'somerandomemail@test.com'
     }
 
     campaignSnowplow.trackEvent(data, 'unsubscriptions')
@@ -328,7 +335,7 @@ describe('Campaign Snowplow', () => {
     const customContexts = [
       {
         schema: idSchema,
-        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid' }
+        data: { gr_master_person_id: 'some-gr-id', sso_guid: 'some-guid', acs_email: 'somerandomemail@test.com' }
       },
       {
         schema: scoreSchema,
