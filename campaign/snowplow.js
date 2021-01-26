@@ -41,6 +41,7 @@ const track = (data, action) => {
 
   const ssoGuid = data['sso_guid']
   const grMasterPersonId = data['gr_master_person_id']
+  const acs_email = data['acs_email']
 
   const idData = { gr_master_person_id: grMasterPersonId }
 
@@ -48,11 +49,15 @@ const track = (data, action) => {
     idData.sso_guid = ssoGuid
   }
 
+  if (acs_email) {
+    idData.acs_email = acs_email
+  }
+
   const uri = buildUri(action, data)
 
   const customContexts = [
     {
-      schema: 'iglu:org.cru/ids/jsonschema/1-0-3',
+      schema: 'iglu:org.cru/ids/jsonschema/1-0-6',
       data: idData
     },
     {
