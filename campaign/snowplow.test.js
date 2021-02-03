@@ -6,8 +6,9 @@ describe('Campaign Snowplow', () => {
     expect(campaignSnowplow).toBeDefined()
   })
 
-  const idSchema = 'iglu:org.cru/ids/jsonschema/1-0-3'
+  const idSchema = 'iglu:org.cru/ids/jsonschema/1-0-6'
   const scoreSchema = 'iglu:org.cru/content-scoring/jsonschema/1-0-0'
+  const acsSchema = 'iglu:org.cru/acs_context/jsonschema/1-0-0'
 
   it('Should track an open event with an external campaign code', () => {
     const mockTrackStructEvent = jest.fn()
@@ -41,6 +42,12 @@ describe('Campaign Snowplow', () => {
         schema: scoreSchema,
         data: {
           uri: uri
+        }
+      },
+      {
+        schema: acsSchema,
+        data: {
+          acs_label: data.delivery_label
         }
       }
     ]
@@ -90,6 +97,12 @@ describe('Campaign Snowplow', () => {
         data: {
           uri: uri
         }
+      },
+      {
+        schema: acsSchema,
+        data: {
+          acs_label: data.delivery_label
+        }
       }
     ]
 
@@ -138,6 +151,12 @@ describe('Campaign Snowplow', () => {
         schema: scoreSchema,
         data: {
           uri: uri
+        }
+      },
+      {
+        schema: acsSchema,
+        data: {
+          acs_label: data.delivery_label
         }
       }
     ]
@@ -190,6 +209,10 @@ describe('Campaign Snowplow', () => {
         data: {
           uri: uri
         }
+      },
+      {
+        schema: acsSchema,
+        data: { acs_label: data.delivery_label, acs_click_url: data.click_url }
       }
     ]
 
@@ -240,6 +263,12 @@ describe('Campaign Snowplow', () => {
         data: {
           uri: uri
         }
+      },
+      {
+        schema: acsSchema,
+        data: {
+          acs_label: data.delivery_label, acs_click_url: data.click_url
+        }
       }
     ]
 
@@ -272,7 +301,7 @@ describe('Campaign Snowplow', () => {
       origin: 'origin',
       sso_guid: 'some-guid',
       gr_master_person_id: 'some-gr-id',
-      log_date: '2018-08-10T17:04:50.419', 
+      log_date: '2018-08-10T17:04:50.419',
       acs_email: 'somerandomemail@test.com'
     }
 
@@ -291,6 +320,10 @@ describe('Campaign Snowplow', () => {
         data: {
           uri: uri
         }
+      },
+      {
+        schema: acsSchema,
+        data: { acs_label: data.service_label }
       }
     ]
 
@@ -341,6 +374,12 @@ describe('Campaign Snowplow', () => {
         schema: scoreSchema,
         data: {
           uri: uri
+        }
+      },
+      {
+        schema: acsSchema,
+        data: {
+          acs_label: data.service_label
         }
       }
     ]
