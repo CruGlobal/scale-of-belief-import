@@ -47,15 +47,15 @@ const track = (data, action) => {
   const acsData = { acs_label: data['service_label'] ? data['service_label'] : data['delivery_label'] }
 
   if (ssoGuid) {
-    idData.sso_guid = ssoGuid
+    idData['sso_guid'] = ssoGuid
   }
 
   if (acsEmail) {
-    idData.acs_email = acsEmail
+    idData['acs_email'] = acsEmail
   }
 
   if (data['click_url']) {
-    acsData.acs_click_url = data['click_url']
+    acsData['acs_click_url'] = data['click_url']
   }
 
   const uri = buildUri(action, data)
