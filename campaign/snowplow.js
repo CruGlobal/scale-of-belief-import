@@ -41,16 +41,21 @@ const track = (data, action) => {
 
   const ssoGuid = data['sso_guid']
   const grMasterPersonId = data['gr_master_person_id']
-  const acs_email = data['acs_email']
+  const acsEmail = data['acs_email']
 
   const idData = { gr_master_person_id: grMasterPersonId }
+  const acsData = { acs_label: data['service_label'] ? data['service_label'] : data['delivery_label'] }
 
   if (ssoGuid) {
-    idData.sso_guid = ssoGuid
+    idData['sso_guid'] = ssoGuid
   }
 
-  if (acs_email) {
-    idData.acs_email = acs_email
+  if (acsEmail) {
+    idData['acs_email'] = acsEmail
+  }
+
+  if (data['click_url']) {
+    acsData['acs_click_url'] = data['click_url']
   }
 
   const uri = buildUri(action, data)
@@ -65,6 +70,10 @@ const track = (data, action) => {
       data: {
         uri: uri
       }
+    },
+    {
+      schema: 'iglu:org.cru/acs_context/jsonschema/1-0-0',
+      data: acsData
     }
   ]
 
