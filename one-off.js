@@ -171,17 +171,17 @@ const processOneDayParams = async (year, month, day) => {
 //runProcess();
 // setRedisDate();
 // getRedisDate();
-oneOffProcess().catch((error) => {
- console.log('Error:', error);
-});
+// oneOffProcess().catch((error) => {
+//  console.log('Error:', error);
+// });
 
 // Month is 0 based
-// processOneDayParams(2021, 11, 1).then(() => {
-//   setRedisDate();
-//   // console.log('set redis date here.');
-// }).catch((error) => {
-//   console.log('Error:', error);
-// });
+processOneDayParams(2021, 11, 1).then(() => {
+  setRedisDate();
+  // console.log('set redis date here.');
+}).catch((error) => {
+  console.log('Error:', error);
+});
 
 //(async () => {
 //  try {
