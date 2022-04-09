@@ -29,7 +29,7 @@
 		"batch": "^0.6.0",
 		"csv-parse": "^2.5.0",
 		"lodash": "^4.17.15",
-		"moment": "^2.24.0",
+		"moment": "^2.29.2",
 		"moment-timezone": "^0.5.27",
 		"promise-retry": "^1.1.1",
 		"redis": "^2.8.0",
