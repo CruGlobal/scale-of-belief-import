@@ -41,7 +41,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -59,10 +59,10 @@ describe('Campaign Snowplow', () => {
       null,
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
-    expect(mockAddPayloadPair).toHaveBeenCalledWith('page', data['delivery_label'])
+    expect(mockAddPayloadPair).toHaveBeenCalledWith('page', data.delivery_label)
   })
 
   it('Should track an open event without an external campaign code', () => {
@@ -95,7 +95,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -113,7 +113,7 @@ describe('Campaign Snowplow', () => {
       null,
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label')
@@ -150,7 +150,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -168,7 +168,7 @@ describe('Campaign Snowplow', () => {
       null,
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label')
@@ -207,7 +207,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -223,7 +223,7 @@ describe('Campaign Snowplow', () => {
       null,
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label')
@@ -261,7 +261,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -279,7 +279,7 @@ describe('Campaign Snowplow', () => {
       'Campaign Label',
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Some Label')
@@ -318,7 +318,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -334,7 +334,7 @@ describe('Campaign Snowplow', () => {
       'origin',
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Service Label')
@@ -373,7 +373,7 @@ describe('Campaign Snowplow', () => {
       {
         schema: scoreSchema,
         data: {
-          uri: uri
+          uri
         }
       },
       {
@@ -391,7 +391,7 @@ describe('Campaign Snowplow', () => {
       'origin',
       null,
       customContexts,
-      Date.parse(data['log_date']))
+      Date.parse(data.log_date))
 
     expect(mockAddPayloadPair).toHaveBeenCalledWith('url', uri)
     expect(mockAddPayloadPair).toHaveBeenCalledWith('page', 'Service Label')

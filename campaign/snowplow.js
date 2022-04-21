@@ -24,7 +24,7 @@ const emitter = snowplow.emitter(
       const data = JSON.parse(requestBody).data
 
       if (data && data[0]) {
-        const action = data[0]['se_ac']
+        const action = data[0].se_ac
         eventTracker.emit('ping', action, data.length)
       }
     }
@@ -39,23 +39,23 @@ const track = (data, action) => {
 
   const tracker = snowplow.tracker([emitter], 'adobecampaign-nodejs', 'adobecampaign', false)
 
-  const ssoGuid = data['sso_guid']
-  const grMasterPersonId = data['gr_master_person_id']
-  const acsEmail = data['acs_email']
+  const ssoGuid = data.sso_guid
+  const grMasterPersonId = data.gr_master_person_id
+  const acsEmail = data.acs_email
 
   const idData = { gr_master_person_id: grMasterPersonId }
-  const acsData = { acs_label: data['service_label'] ? data['service_label'] : data['delivery_label'] }
+  const acsData = { acs_label: data.service_label ? data.service_label : data.delivery_label }
 
   if (ssoGuid) {
-    idData['sso_guid'] = ssoGuid
+    idData.sso_guid = ssoGuid
   }
 
   if (acsEmail) {
-    idData['acs_email'] = acsEmail
+    idData.acs_email = acsEmail
   }
 
-  if (data['click_url']) {
-    acsData['acs_click_url'] = data['click_url']
+  if (data.click_url) {
+    acsData.acs_click_url = data.click_url
   }
 
   const uri = buildUri(action, data)
@@ -68,7 +68,7 @@ const track = (data, action) => {
     {
       schema: 'iglu:org.cru/content-scoring/jsonschema/1-0-0',
       data: {
-        uri: uri
+        uri
       }
     },
     {
@@ -81,29 +81,29 @@ const track = (data, action) => {
   let property
   let page
   // Dates are using the Adobe Campaign Standard server's timezone, which is EST/EDT.
-  const logDate = moment.tz(data['log_date'], 'America/New_York')
+  const logDate = moment.tz(data.log_date, 'America/New_York')
 
+  let campaignCode
   switch (action) {
     case ACTION_CLICK:
-      label = data['click_url']
-      property = data['adobe_campaign_label']
-      page = data['delivery_label']
+      label = data.click_url
+      property = data.adobe_campaign_label
+      page = data.delivery_label
       break
     case ACTION_OPEN:
-      let campaignCode
-      if (data['ext_campaign_code']) {
-        campaignCode = encodeURIComponent(data['ext_campaign_code'])
+      if (data.ext_campaign_code) {
+        campaignCode = encodeURIComponent(data.ext_campaign_code)
       }
 
       label = campaignCode || null
-      property = data['adobe_campaign_label']
-      page = data['delivery_label']
+      property = data.adobe_campaign_label
+      page = data.delivery_label
       break
     case ACTION_SUBSCRIBE:
     case ACTION_UNSUBSCRIBE:
-      label = data['cru_service_name'] ? data['cru_service_name'] : null
-      property = data['origin']
-      page = data['service_label']
+      label = data.cru_service_name ? data.cru_service_name : null
+      property = data.origin
+      page = data.service_label
   }
 
   tracker.addPayloadPair('url', uri)
@@ -124,19 +124,19 @@ const buildUri = (action, data) => {
 
   let identifier
 
-  if (data['adobe_campaign_label']) {
-    identifier = encodeURIComponent(data['adobe_campaign_label'])
-  } else if (data['delivery_label']) {
-    identifier = encodeURIComponent(data['delivery_label'])
-  } else if (data['service_label']) {
-    identifier = encodeURIComponent(data['service_label'])
+  if (data.adobe_campaign_label) {
+    identifier = encodeURIComponent(data.adobe_campaign_label)
+  } else if (data.delivery_label) {
+    identifier = encodeURIComponent(data.delivery_label)
+  } else if (data.service_label) {
+    identifier = encodeURIComponent(data.service_label)
   }
 
   uri = `${uri}/${identifier}`
 
   let campaignCode
-  if (data['ext_campaign_code']) {
-    campaignCode = encodeURIComponent(data['ext_campaign_code'])
+  if (data.ext_campaign_code) {
+    campaignCode = encodeURIComponent(data.ext_campaign_code)
   }
   if (campaignCode) {
     uri = `${uri}/${campaignCode}`

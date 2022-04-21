@@ -23,6 +23,6 @@ const removeNonDisplayable = (original) => {
 }
 
 module.exports = {
-  buildFormattedDate: buildFormattedDate,
-  removeNonDisplayable: removeNonDisplayable
+  buildFormattedDate,
+  removeNonDisplayable
 }

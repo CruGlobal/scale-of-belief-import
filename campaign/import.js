@@ -121,14 +121,14 @@ const self = module.exports = {
     }
 
     return s3.listObjectsV2(params).promise().then((data) => {
-      const files = data['Contents']
+      const files = data.Contents
       let latestModified = null
       let latestFileName = null
 
       for (let i = 0; i < files.length; i++) {
         const fileData = files[i]
-        const lastModified = fileData['LastModified']
-        const fileName = fileData['Key']
+        const lastModified = fileData.LastModified
+        const fileName = fileData.Key
 
         if (latestModified === null || lastModified > latestModified) {
           latestModified = lastModified
@@ -148,7 +148,7 @@ const self = module.exports = {
     }
 
     return s3.getObject(params).promise().then((data) => {
-      return zlib.unzipSync(data['Body'])
+      return zlib.unzipSync(data.Body)
     }).catch((error) => {
       if (error.message === 'The specified key does not exist.') {
         // If there is no file for this, just return an empty buffer

@@ -87,8 +87,8 @@ const findMasterPersonId = (personId, accessToken = grAccessToken) => {
 }
 
 module.exports = {
-  findEntitiesByEmail: findEntitiesByEmail,
-  createEntity: createEntity,
+  findEntitiesByEmail,
+  createEntity,
   findOrCreateId: (user, callback) => {
     if (!user.email) { return false }
 
@@ -100,5 +100,5 @@ module.exports = {
       }
     })
   },
-  findMasterPersonId: findMasterPersonId
+  findMasterPersonId
 }

@@ -32,46 +32,46 @@ AWS.S3.prototype = {
     let contents
     let fileType
 
-    if (params['Prefix'].startsWith(TYPE_OPEN)) {
+    if (params.Prefix.startsWith(TYPE_OPEN)) {
       fileType = TYPE_OPEN
-    } else if (params['Prefix'].startsWith(TYPE_CLICK)) {
+    } else if (params.Prefix.startsWith(TYPE_CLICK)) {
       fileType = TYPE_CLICK
-    } else if (params['Prefix'].startsWith(TYPE_UNSUBSCRIPTION)) {
+    } else if (params.Prefix.startsWith(TYPE_UNSUBSCRIPTION)) {
       fileType = TYPE_UNSUBSCRIPTION
-    } else if (params['Prefix'].startsWith(TYPE_SUBSCRIPTION)) {
+    } else if (params.Prefix.startsWith(TYPE_SUBSCRIPTION)) {
       fileType = TYPE_SUBSCRIPTION
     } else {
-      throw new Error(`Type ${params['Prefix']} not supported.`)
+      throw new Error(`Type ${params.Prefix} not supported.`)
     }
 
     let filteredData
 
     switch (fileType) {
       case TYPE_OPEN:
-        contents = stubs.listOpens['Contents']
+        contents = stubs.listOpens.Contents
         filteredData = Object.create(stubs.listOpens)
         break
       case TYPE_CLICK:
-        contents = stubs.listClicks['Contents']
+        contents = stubs.listClicks.Contents
         filteredData = Object.create(stubs.listClicks)
         break
       case TYPE_SUBSCRIPTION:
-        contents = stubs.listSubscriptions['Contents']
+        contents = stubs.listSubscriptions.Contents
         filteredData = Object.create(stubs.listSubscriptions)
         break
       case TYPE_UNSUBSCRIPTION:
-        contents = stubs.listUnsubscriptions['Contents']
+        contents = stubs.listUnsubscriptions.Contents
         filteredData = Object.create(stubs.listUnsubscriptions)
     }
     const filteredContents = []
 
     for (let i = 0; i < contents.length; i++) {
-      if (`${fileType}/${contents[i]['Key']}`.startsWith(params['Prefix'])) {
+      if (`${fileType}/${contents[i].Key}`.startsWith(params.Prefix)) {
         filteredContents.push(contents[i])
       }
     }
 
-    filteredData['Contents'] = filteredContents
+    filteredData.Contents = filteredContents
     return {
       promise: () => Promise.resolve(filteredData)
     }
@@ -80,16 +80,16 @@ AWS.S3.prototype = {
   getObject (params) {
     let zippedData
 
-    if (params['Key'].indexOf('clicks') !== -1) {
+    if (params.Key.indexOf('clicks') !== -1) {
       zippedData = stubs.getClicks
-    } else if (params['Key'].indexOf('opens') !== -1) {
+    } else if (params.Key.indexOf('opens') !== -1) {
       zippedData = stubs.getOpens
-    } else if (params['Key'].indexOf(TYPE_UNSUBSCRIPTION) !== -1) {
+    } else if (params.Key.indexOf(TYPE_UNSUBSCRIPTION) !== -1) {
       zippedData = stubs.getUnsubscriptions
-    } else if (params['Key'].indexOf(TYPE_SUBSCRIPTION) !== -1) {
+    } else if (params.Key.indexOf(TYPE_SUBSCRIPTION) !== -1) {
       zippedData = stubs.getSubscriptions
     } else {
-      zippedData = stubs.getOther(params['Key'])
+      zippedData = stubs.getOther(params.Key)
       if (zippedData instanceof Error) {
         return { promise: () => Promise.reject(zippedData) }
       }
