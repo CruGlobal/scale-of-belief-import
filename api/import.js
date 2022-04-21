@@ -19,7 +19,7 @@ module.exports.handler = (event, context, callback) => {
     batch.push((done) => {
       gr.createEntity(user, (person) => {
         if (person) {
-          const masterPersonId = person['master_person:relationship']['master_person']
+          const masterPersonId = person['master_person:relationship'].master_person
           snowplow.track(user.score, masterPersonId, inputData.page)
           snowplowTotal++
         }

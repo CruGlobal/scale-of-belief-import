@@ -24,7 +24,7 @@ describe('Siebel Import', () => {
 
   it('Should track an event', done => {
     const grSpy = jest.spyOn(gr, 'findMasterPersonId')
-    process.env['SIEBEL_GR_ACCESS_TOKEN'] = 'abc123'
+    process.env.SIEBEL_GR_ACCESS_TOKEN = 'abc123'
     const event = {
       body: JSON.stringify(
         {

@@ -20,22 +20,22 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(2) // 2 records in the CSV
 
       const firstRecord = parsedData[0]
-      expect(firstRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1')
-      expect(firstRecord['ext_campaign_code']).toEqual('bill-test-campaign')
-      expect(firstRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)')
-      expect(firstRecord['sso_guid']).toEqual('test-guid-1')
-      expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(firstRecord['log_date']).toEqual('2018-07-30T09:20:49.000')
-      expect(firstRecord['click_url']).toEqual('https://google.com')
+      expect(firstRecord.adobe_campaign_label).toEqual('Bill R Test Campaign 1')
+      expect(firstRecord.ext_campaign_code).toEqual('bill-test-campaign')
+      expect(firstRecord.delivery_label).toEqual('[2018/07/26] Multilingual email (Chinese)')
+      expect(firstRecord.sso_guid).toEqual('test-guid-1')
+      expect(firstRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(firstRecord.log_date).toEqual('2018-07-30T09:20:49.000')
+      expect(firstRecord.click_url).toEqual('https://google.com')
 
       const secondRecord = parsedData[1]
-      expect(secondRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1')
-      expect(secondRecord['ext_campaign_code']).toEqual('bill-test-campaign')
-      expect(secondRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)')
-      expect(secondRecord['sso_guid']).toEqual('test-guid-2')
-      expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(secondRecord['log_date']).toEqual('2018-07-30T09:12:30.000')
-      expect(secondRecord['click_url']).toEqual('https://www.cru.org')
+      expect(secondRecord.adobe_campaign_label).toEqual('Bill R Test Campaign 1')
+      expect(secondRecord.ext_campaign_code).toEqual('bill-test-campaign')
+      expect(secondRecord.delivery_label).toEqual('[2018/07/26] Multilingual email (Chinese)')
+      expect(secondRecord.sso_guid).toEqual('test-guid-2')
+      expect(secondRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(secondRecord.log_date).toEqual('2018-07-30T09:12:30.000')
+      expect(secondRecord.click_url).toEqual('https://www.cru.org')
       done()
     })
   })
@@ -50,28 +50,28 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(3) // 3 records in the CSV
 
       const firstRecord = parsedData[0]
-      expect(firstRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1')
-      expect(firstRecord['ext_campaign_code']).toEqual('bill-test-campaign')
-      expect(firstRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)')
-      expect(firstRecord['sso_guid']).toEqual('test-guid-1')
-      expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(firstRecord['log_date']).toEqual('2018-07-30T09:20:49.557')
+      expect(firstRecord.adobe_campaign_label).toEqual('Bill R Test Campaign 1')
+      expect(firstRecord.ext_campaign_code).toEqual('bill-test-campaign')
+      expect(firstRecord.delivery_label).toEqual('[2018/07/26] Multilingual email (Chinese)')
+      expect(firstRecord.sso_guid).toEqual('test-guid-1')
+      expect(firstRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(firstRecord.log_date).toEqual('2018-07-30T09:20:49.557')
 
       const secondRecord = parsedData[1]
-      expect(secondRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1')
-      expect(secondRecord['ext_campaign_code']).toEqual('bill-test-campaign')
-      expect(secondRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)')
-      expect(secondRecord['sso_guid']).toEqual('test-guid-2')
-      expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(secondRecord['log_date']).toEqual('2018-07-30T09:12:33.310')
+      expect(secondRecord.adobe_campaign_label).toEqual('Bill R Test Campaign 1')
+      expect(secondRecord.ext_campaign_code).toEqual('bill-test-campaign')
+      expect(secondRecord.delivery_label).toEqual('[2018/07/26] Multilingual email (Chinese)')
+      expect(secondRecord.sso_guid).toEqual('test-guid-2')
+      expect(secondRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(secondRecord.log_date).toEqual('2018-07-30T09:12:33.310')
 
       const thirdRecord = parsedData[2]
-      expect(thirdRecord['adobe_campaign_label']).toEqual('Bill R Test Campaign 1')
-      expect(thirdRecord['ext_campaign_code']).toEqual('bill-test-campaign')
-      expect(thirdRecord['delivery_label']).toEqual('[2018/07/26] Multilingual email (Chinese)')
-      expect(thirdRecord['sso_guid']).toEqual('test-guid-2')
-      expect(thirdRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(thirdRecord['log_date']).toEqual('2018-07-30T09:12:30.000')
+      expect(thirdRecord.adobe_campaign_label).toEqual('Bill R Test Campaign 1')
+      expect(thirdRecord.ext_campaign_code).toEqual('bill-test-campaign')
+      expect(thirdRecord.delivery_label).toEqual('[2018/07/26] Multilingual email (Chinese)')
+      expect(thirdRecord.sso_guid).toEqual('test-guid-2')
+      expect(thirdRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(thirdRecord.log_date).toEqual('2018-07-30T09:12:30.000')
       done()
     })
   })
@@ -86,18 +86,18 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(2) // 2 records in the CSV
 
       const firstRecord = parsedData[0]
-      expect(firstRecord['service_label']).toEqual('Bill Newsletter')
-      expect(firstRecord['origin']).toEqual('Bill Origin')
-      expect(firstRecord['sso_guid']).toEqual('test-guid-1')
-      expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(firstRecord['log_date']).toEqual('2018-08-10T17:04:50.419')
+      expect(firstRecord.service_label).toEqual('Bill Newsletter')
+      expect(firstRecord.origin).toEqual('Bill Origin')
+      expect(firstRecord.sso_guid).toEqual('test-guid-1')
+      expect(firstRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(firstRecord.log_date).toEqual('2018-08-10T17:04:50.419')
 
       const secondRecord = parsedData[1]
-      expect(firstRecord['service_label']).toEqual('Bill Newsletter')
-      expect(firstRecord['origin']).toEqual('Bill Origin')
-      expect(secondRecord['sso_guid']).toEqual('test-guid-2')
-      expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(secondRecord['log_date']).toEqual('2018-08-10T17:04:50.419')
+      expect(firstRecord.service_label).toEqual('Bill Newsletter')
+      expect(firstRecord.origin).toEqual('Bill Origin')
+      expect(secondRecord.sso_guid).toEqual('test-guid-2')
+      expect(secondRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(secondRecord.log_date).toEqual('2018-08-10T17:04:50.419')
 
       done()
     })
@@ -113,18 +113,18 @@ describe('Campaign Import', () => {
       expect(parsedData.length).toEqual(2) // 2 records in the CSV
 
       const firstRecord = parsedData[0]
-      expect(firstRecord['service_label']).toEqual('Bill Newsletter')
-      expect(firstRecord['origin']).toEqual('Bill Origin')
-      expect(firstRecord['sso_guid']).toEqual('test-guid-1')
-      expect(firstRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(firstRecord['log_date']).toEqual('2018-08-13T17:02:55.224')
+      expect(firstRecord.service_label).toEqual('Bill Newsletter')
+      expect(firstRecord.origin).toEqual('Bill Origin')
+      expect(firstRecord.sso_guid).toEqual('test-guid-1')
+      expect(firstRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(firstRecord.log_date).toEqual('2018-08-13T17:02:55.224')
 
       const secondRecord = parsedData[1]
-      expect(firstRecord['service_label']).toEqual('Bill Newsletter')
-      expect(firstRecord['origin']).toEqual('Bill Origin')
-      expect(secondRecord['sso_guid']).toEqual('test-guid-2')
-      expect(secondRecord['gr_master_person_id']).toEqual('test-gr-master-person-id')
-      expect(secondRecord['log_date']).toEqual('2018-08-13T17:02:55.224')
+      expect(firstRecord.service_label).toEqual('Bill Newsletter')
+      expect(firstRecord.origin).toEqual('Bill Origin')
+      expect(secondRecord.sso_guid).toEqual('test-guid-2')
+      expect(secondRecord.gr_master_person_id).toEqual('test-gr-master-person-id')
+      expect(secondRecord.log_date).toEqual('2018-08-13T17:02:55.224')
 
       done()
     })
@@ -305,7 +305,7 @@ describe('Campaign Import', () => {
     dataImport.setupHandlers()
 
     it('Should be finished if there were no events to process', done => {
-      let timer = setInterval(dataImport.eventsHaveFinished, 2)
+      const timer = setInterval(dataImport.eventsHaveFinished, 2)
       eventTracker.on('end', () => {
         clearInterval(timer)
         done()
@@ -322,7 +322,7 @@ describe('Campaign Import', () => {
       eventTracker.emit('ping', 'subscribe', 7)
       eventTracker.emit('ping', 'unsubscribe', 2)
 
-      let timer = setInterval(dataImport.eventsHaveFinished, 2)
+      const timer = setInterval(dataImport.eventsHaveFinished, 2)
       eventTracker.on('end', () => {
         clearInterval(timer)
         done()
@@ -341,7 +341,7 @@ describe('Campaign Import', () => {
       // Run once outside of interval loop to prove the -1 values
       dataImport.eventsHaveFinished()
       dataImport.setDataToProcess(1, 15, 5, 7, 2)
-      let timer = setInterval(dataImport.eventsHaveFinished, 2)
+      const timer = setInterval(dataImport.eventsHaveFinished, 2)
       eventTracker.on('end', () => {
         clearInterval(timer)
         done()
@@ -352,11 +352,11 @@ describe('Campaign Import', () => {
   describe('Advance counter', () => {
     const formattedDate = '20180730'
     it('Should overwrite the -1 originating value', done => {
-      dataImport.totals['numOpens'] = -1
+      dataImport.totals.numOpens = -1
       jest.spyOn(dataImport, 'trackEvents').mockImplementationOnce(() => Promise.resolve(1))
 
       dataImport.advanceCounter('numOpens', formattedDate, 'opens').then(() => {
-        expect(dataImport.totals['numOpens']).toEqual(1)
+        expect(dataImport.totals.numOpens).toEqual(1)
         done()
       }).catch((err) => {
         done.fail(err)
@@ -364,11 +364,11 @@ describe('Campaign Import', () => {
     })
 
     it('Should add to the already-advanced value', done => {
-      dataImport.totals['numOpens'] = 1
+      dataImport.totals.numOpens = 1
       jest.spyOn(dataImport, 'trackEvents').mockImplementationOnce(() => Promise.resolve(1))
 
       dataImport.advanceCounter('numOpens', formattedDate, 'opens').then(() => {
-        expect(dataImport.totals['numOpens']).toEqual(2)
+        expect(dataImport.totals.numOpens).toEqual(2)
         done()
       }).catch((err) => {
         done.fail(err)

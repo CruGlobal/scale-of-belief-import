@@ -39,7 +39,7 @@ module.exports.handler = (event, context, callback) => {
     return
   }
 
-  const uri = inputData['url']
+  const uri = inputData.url
   const endOfPath = uri.lastIndexOf('/')
   let designation = ''
 
@@ -60,28 +60,28 @@ module.exports.handler = (event, context, callback) => {
   }
 
   const label = 'siebel:donation:' + designation
-  const timestamp = moment.tz(inputData['dtm'], 'America/New_York')
+  const timestamp = moment.tz(inputData.dtm, 'America/New_York')
 
   tracker.addPayloadPair('url', uri)
   tracker.addPayloadPair('page', 'Donation')
-  tracker.addPayloadPair('duid', inputData['duid'])
+  tracker.addPayloadPair('duid', inputData.duid)
 
   const customContexts = [
     {
       schema: 'iglu:org.cru/content-scoring/jsonschema/1-0-0',
       data: {
-        uri: uri
+        uri
       }
     }
   ]
 
-  if (isEmpty(inputData['gr_master_person_id']) || inputData['gr_master_person_id'] === 'unknown') {
+  if (isEmpty(inputData.gr_master_person_id) || inputData.gr_master_person_id === 'unknown') {
     // Track event without master_person_id if its missing or set to unknown
     tracker.trackStructEvent(
       'donation',
       'donate',
       label,
-      inputData['eid'],
+      inputData.eid,
       null, // value
       customContexts,
       timestamp.valueOf()
@@ -90,7 +90,7 @@ module.exports.handler = (event, context, callback) => {
     callback(null, { statusCode: 204 })
   } else {
     return promiseRetry((retry, number) => {
-      return gr.findMasterPersonId(inputData['gr_master_person_id'], process.env['SIEBEL_GR_ACCESS_TOKEN'])
+      return gr.findMasterPersonId(inputData.gr_master_person_id, process.env.SIEBEL_GR_ACCESS_TOKEN)
         .catch(error => {
           if (startsWith(error.message, 'Person missing master_person id')) {
             throw error
@@ -109,7 +109,7 @@ module.exports.handler = (event, context, callback) => {
           'donation',
           'donate',
           label,
-          inputData['eid'],
+          inputData.eid,
           null, // value
           customContexts,
           timestamp.valueOf()
